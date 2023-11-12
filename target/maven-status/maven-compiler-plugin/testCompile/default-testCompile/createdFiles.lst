@@ -1,0 +1,7 @@
+JSonVisitorTest.class
+XMLVisitorTest.class
+CircleTest.class
+TriangleTest.class
+DrawShapeCommandTest.class
+SquareTest.class
+DrawToolTest.class
