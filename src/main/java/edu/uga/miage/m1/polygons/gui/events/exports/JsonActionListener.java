@@ -36,7 +36,7 @@ public class JsonActionListener implements ActionListener {
         JsonObject jsonObject = Json.createObjectBuilder()
             .add("shapes", jsonArray)
             .build();
-        this.writeInFile("export.json", jsonObject);
+        this.writeInFile("exports/export.json", jsonObject);
     }
 
 

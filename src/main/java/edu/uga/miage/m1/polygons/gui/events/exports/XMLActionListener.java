@@ -55,7 +55,7 @@ public class XMLActionListener implements ActionListener {
                     Node copiedNode = document.importNode(xmlVisitor.getShapElement(), true);
                     shapesElement.appendChild(copiedNode);
                 }
-                this.writeInFile("export.xml", document);
+                this.writeInFile("exports/export.xml", document);
             } catch (ParserConfigurationException e) {
                 LOGGER.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);
             }
