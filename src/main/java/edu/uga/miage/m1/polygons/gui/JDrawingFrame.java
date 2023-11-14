@@ -33,9 +33,11 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import edu.uga.miage.m1.polygons.gui.commands.DrawShapeCommand;
-import edu.uga.miage.m1.polygons.gui.listeners.exports.XMLActionListener;
-import edu.uga.miage.m1.polygons.gui.listeners.exports.JsonActionListener;
+import edu.uga.miage.m1.polygons.gui.events.ShapeActionListener;
+import edu.uga.miage.m1.polygons.gui.events.exports.JsonActionListener;
+import edu.uga.miage.m1.polygons.gui.events.exports.XMLActionListener;
 import edu.uga.miage.m1.polygons.gui.shapes.Circle;
+import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 import edu.uga.miage.m1.polygons.gui.shapes.Square;
 import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
@@ -52,12 +54,13 @@ import java.util.logging.Logger;
  */
 public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionListener {
 
-    private enum Shapes {
 
-        SQUARE, TRIANGLE, CIRCLE
-    }
 
     private static final long serialVersionUID = 1L;
+
+    public void setSelected(Shapes selected) {
+        this.selected = selected;
+    }
 
     private JToolBar toolbar;
 
@@ -67,7 +70,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private JLabel label;
 
-    private transient ActionListener reusableActionListener = new ShapeActionListener();
 
     private List<SimpleShape> drawnShapes = new ArrayList<>();
 
@@ -82,7 +84,11 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      */
     private EnumMap<Shapes, JButton> buttons = new EnumMap<>(Shapes.class);
 
+    public EnumMap<Shapes, JButton> getButtons() {
+        return buttons;
+    }
 
+    private transient ActionListener reusableActionListener = new ShapeActionListener(this);
     private transient JsonActionListener jsonActionListener = new JsonActionListener(this);
     private transient XMLActionListener xmlActionListener = new XMLActionListener(this);
     private transient CursorActionListener cursorActionListener = new CursorActionListener(this);
@@ -96,27 +102,18 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         super(frameName);
         // Instantiates components
         toolbar = new JToolBar("Toolbar");
-        panel = new DrawingPanel(this);
-        panel.setBackground(Color.WHITE);
-        panel.setLayout(null);
-        panel.setMinimumSize(new Dimension(700, 700));
-        
-        panel.addMouseListener(this);
-        panel.addMouseMotionListener(this);
+        initializePanel();
         label = new JLabel(" ", SwingConstants.LEFT);
         // Fills the panel
         setLayout(new BorderLayout());
         add(toolbar, BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
         add(label, BorderLayout.SOUTH);
-        // Add shapes in the menu
-        addShape(Shapes.SQUARE, new ImageIcon(getClass().getResource("images/square.png")));
-        addShape(Shapes.TRIANGLE, new ImageIcon(getClass().getResource("images/triangle.png")));
-        addShape(Shapes.CIRCLE, new ImageIcon(getClass().getResource("images/circle.png")));
 
-        
+
+        // Add shapes in the menu
+        addShapes();
         addCursorButton();
-        
         setPreferredSize(new Dimension(700, 700));
 
 
@@ -156,6 +153,22 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         panel.getActionMap().put("undo", undoAction);
 
         
+    }
+
+    private void initializePanel() {
+        panel = new DrawingPanel(this);
+        panel.setBackground(Color.WHITE);
+        panel.setLayout(null);
+        panel.setMinimumSize(new Dimension(700, 700));
+        
+        panel.addMouseListener(this);
+        panel.addMouseMotionListener(this);
+    }
+
+    private void addShapes() {
+        addShape(Shapes.SQUARE, new ImageIcon(getClass().getResource("images/square.png")));
+        addShape(Shapes.TRIANGLE, new ImageIcon(getClass().getResource("images/triangle.png")));
+        addShape(Shapes.CIRCLE, new ImageIcon(getClass().getResource("images/circle.png")));
     }
 
     
@@ -289,25 +302,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      * the drawing frame's currently selected shape when receiving
      * an action event.
      */
-    private class ShapeActionListener implements ActionListener {
-        public void actionPerformed(ActionEvent evt) {
-            
-            
-            // ItÃÂÃÂÃÂÃÂ¨re sur tous les boutons
-            Iterator<Shapes> keys = buttons.keySet().iterator();
-            while (keys.hasNext()) {
-                Shapes shape = keys.next();
-                JButton btn = buttons.get(shape);
-                if (evt.getActionCommand().equals(shape.toString())) {
-                    btn.setBorderPainted(true);
-                    selected = shape;
-                } else {
-                    btn.setBorderPainted(false);
-                }
-                btn.repaint();
-            }
-        }
-    }
 
     private class CursorActionListener implements ActionListener {
 
@@ -355,8 +349,6 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                 public void mouseExited(MouseEvent e) {}
             });
         }
-
-        
     }
 }
 
