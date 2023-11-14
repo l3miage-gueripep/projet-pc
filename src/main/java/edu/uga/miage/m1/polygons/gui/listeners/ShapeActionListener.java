@@ -1,4 +1,4 @@
-package edu.uga.miage.m1.polygons.gui.events;
+package edu.uga.miage.m1.polygons.gui.listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
