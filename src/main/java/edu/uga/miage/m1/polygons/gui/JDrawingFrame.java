@@ -56,8 +56,6 @@ import edu.uga.miage.m1.polygons.gui.shapes.Circle;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 import edu.uga.miage.m1.polygons.gui.shapes.Square;
 import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
-
-import java.io.Console;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -330,8 +328,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      * an action event.
      */
     private class ShapeActionListener implements ActionListener {
-
         public void actionPerformed(ActionEvent evt) {
+            //
+            panel.addActionL(cursorActionListener);
             // ItÃÂÃÂÃÂÃÂ¨re sur tous les boutons
             Iterator<Shapes> keys = buttons.keySet().iterator();
             while (keys.hasNext()) {
@@ -416,7 +415,32 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                 public void mouseExited(MouseEvent e) {}
             });
         }
+
+        private class MoveActionListener implements ActionListener {
+            public void actionPerformed(ActionEvent evt) {
+                ((Object) panel).removeActionL(cursorActionListener);
+                panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                panel.removeMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {}
+                
+                    @Override
+                    public void mousePressed(MouseEvent e) {}
+                
+                    @Override
+                    public void mouseReleased(MouseEvent e) {}
+                
+                    @Override
+                    public void mouseEntered(MouseEvent e) {}
+                
+                    @Override
+                    public void mouseExited(MouseEvent e) {}
+                });
+            }
+        }
     }
+
+    
 
     private class XMLActionListener implements ActionListener {
         private XMLVisitor xmlVisitor = new XMLVisitor();
