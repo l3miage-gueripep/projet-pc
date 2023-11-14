@@ -21,10 +21,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -36,29 +32,13 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
 import edu.uga.miage.m1.polygons.gui.commands.DrawShapeCommand;
-import edu.uga.miage.m1.polygons.gui.persistence.JSonVisitor;
-import edu.uga.miage.m1.polygons.gui.persistence.Visitable;
-import edu.uga.miage.m1.polygons.gui.persistence.XMLVisitor;
+import edu.uga.miage.m1.polygons.gui.listeners.exports.XMLActionListener;
+import edu.uga.miage.m1.polygons.gui.listeners.exports.JsonActionListener;
 import edu.uga.miage.m1.polygons.gui.shapes.Circle;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 import edu.uga.miage.m1.polygons.gui.shapes.Square;
 import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -78,7 +58,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     }
 
     private static final long serialVersionUID = 1L;
-//test
+
     private JToolBar toolbar;
 
     private Shapes selected;
@@ -89,16 +69,12 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
 
     private transient ActionListener reusableActionListener = new ShapeActionListener();
 
-    protected static List<SimpleShape> drawnShapes = new ArrayList<>();
+    private List<SimpleShape> drawnShapes = new ArrayList<>();
 
     private static final Logger logger = Logger.getLogger(JDrawingFrame.class.getName());
 
     private transient DrawTool drawTool;
-
-    private static final String GENERIC_ERROR_MESSAGE = "An error occurred";
-
     private SimpleShape movingShape;
-
 
 
     /**
@@ -107,9 +83,9 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     private EnumMap<Shapes, JButton> buttons = new EnumMap<>(Shapes.class);
 
 
-    private transient JsonActionListener jsonActionListener = new JsonActionListener();
-    private transient XMLActionListener xmlActionListener = new XMLActionListener();
-    private transient CursorActionListener cursorActionListener = new CursorActionListener();
+    private transient JsonActionListener jsonActionListener = new JsonActionListener(this);
+    private transient XMLActionListener xmlActionListener = new XMLActionListener(this);
+    private transient CursorActionListener cursorActionListener = new CursorActionListener(this);
     
 
     /**
@@ -120,7 +96,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         super(frameName);
         // Instantiates components
         toolbar = new JToolBar("Toolbar");
-        panel = new DrawingPanel();
+        panel = new DrawingPanel(this);
         panel.setBackground(Color.WHITE);
         panel.setLayout(null);
         panel.setMinimumSize(new Dimension(700, 700));
@@ -182,6 +158,14 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         
     }
 
+    
+
+    public List<SimpleShape> getDrawnShapes() {
+        return drawnShapes;
+    }
+
+
+
     private void addCursorButton(){
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("images/cursor.png"));
         Image scaledImage = originalIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
@@ -192,29 +176,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         cursorButton.setPreferredSize(new Dimension(50, 50));
     }
 
-    public class DrawingPanel extends JPanel{
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g;
-            
-            // Set rendering settings for all shapes
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            
-            for (SimpleShape shape : drawnShapes) {
-                // Apply rendering settings
-                GradientPaint gradient = new GradientPaint(shape.getX(), shape.getY(), Color.RED, (float) shape.getX() + 50, shape.getY(), Color.WHITE);
-                g2.setPaint(gradient);
-                
-                BasicStroke wideStroke = new BasicStroke(2.0f);
-                g2.setColor(Color.black);
-                g2.setStroke(wideStroke);
-                
-                // Draw the shape
-                shape.draw(g2);
-            }
-        }
-    }
+
 
     /**
      * Injects an available <tt>SimpleShape</tt> into the drawing frame.
@@ -260,7 +222,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             }
             DrawShapeCommand cDrawShape = new DrawShapeCommand(shape, g2);
             this.drawTool.addCommand(cDrawShape);
-            JDrawingFrame.drawnShapes.add(shape);
+            drawnShapes.add(shape);
             this.drawTool.play();
         }
     }
@@ -329,8 +291,8 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
      */
     private class ShapeActionListener implements ActionListener {
         public void actionPerformed(ActionEvent evt) {
-            //
-            panel.addActionL(cursorActionListener);
+            
+            
             // ItÃÂÃÂÃÂÃÂ¨re sur tous les boutons
             Iterator<Shapes> keys = buttons.keySet().iterator();
             while (keys.hasNext()) {
@@ -347,36 +309,15 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
         }
     }
 
-    private class JsonActionListener implements ActionListener {
-        private JSonVisitor jSonVisitor = new JSonVisitor();
-        JsonArrayBuilder jsonArray = Json.createArrayBuilder();
-        public void actionPerformed(ActionEvent evt) {
-            for(Visitable shape : JDrawingFrame.drawnShapes){
-                // ItÃÂ¨re sur tous les boutons
-                shape.accept(jSonVisitor);
-                jsonArray.add(jSonVisitor.getJsonObject());
-            }
-            JsonObject jsonObject = Json.createObjectBuilder()
-                .add("shapes", jsonArray)
-                .build();
-            this.writeInFile("export.json", jsonObject);
-        }
-
-
-        private void writeInFile(String filepath, JsonObject jsonObject){
-            try  (FileWriter fileWriter = new FileWriter(filepath)) {
-            
-                // Write the JSON object to the file
-                fileWriter.write(jsonObject.toString());
-            
-                logger.log(Level.INFO, "JSON object has been written to {0}", filepath);
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);
-            }
-        }
-    }
-
     private class CursorActionListener implements ActionListener {
+
+        JDrawingFrame jDrawingFrame;
+
+        public CursorActionListener(JDrawingFrame jDrawingFrame){
+            super();
+            this.jDrawingFrame = jDrawingFrame;
+        }
+
         public void actionPerformed(ActionEvent evt) {
             panel.setCursor(new Cursor(Cursor.MOVE_CURSOR));
             selected = null;
@@ -388,14 +329,13 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
                 @Override
                 public void mousePressed(MouseEvent e) {
                     movingShape = null;
-                    for(SimpleShape shape : JDrawingFrame.drawnShapes){
+                    for(SimpleShape shape : jDrawingFrame.getDrawnShapes()){
                         if(shape.isInside(e.getX(), e.getY())){
                             System.out.println("shape selected");
                             movingShape = shape;
 
                         }
                     }
-
                 }
             
                 @Override
@@ -416,87 +356,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
             });
         }
 
-        private class MoveActionListener implements ActionListener {
-            public void actionPerformed(ActionEvent evt) {
-                ((Object) panel).removeActionL(cursorActionListener);
-                panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                panel.removeMouseListener(new MouseListener() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {}
-                
-                    @Override
-                    public void mousePressed(MouseEvent e) {}
-                
-                    @Override
-                    public void mouseReleased(MouseEvent e) {}
-                
-                    @Override
-                    public void mouseEntered(MouseEvent e) {}
-                
-                    @Override
-                    public void mouseExited(MouseEvent e) {}
-                });
-            }
-        }
-    }
-
-    
-
-    private class XMLActionListener implements ActionListener {
-        private XMLVisitor xmlVisitor = new XMLVisitor();
         
-        public void actionPerformed(ActionEvent evt) {
-            Document document = null;
-            try {
-                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                document = dBuilder.newDocument();
-                
-                Element rooElement = document.createElement("root");
-                document.appendChild(rooElement);
-                Element shapesElement = document.createElement("shapes");
-                rooElement.appendChild(shapesElement);
-                for (Visitable shape : JDrawingFrame.drawnShapes) {
-                    // ItÃ¨re sur tous les boutons
-                    shape.accept(xmlVisitor);
-                    //on importe la node dans le document
-                    Node copiedNode = document.importNode(xmlVisitor.getShapElement(), true);
-                    shapesElement.appendChild(copiedNode);
-                }
-                this.writeInFile("export.xml", document);
-            } catch (ParserConfigurationException e) {
-                logger.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);
-            }
-        }
-        
-
-        private void writeInFile(String filepath, Document xmlDocument){
-            try {
-                TransformerFactory transformerFactory = TransformerFactory.newDefaultInstance();
-                Transformer transformer = transformerFactory.newTransformer();
-                StringWriter stringWriter = new StringWriter();
-                StreamResult streamResult = new StreamResult(stringWriter);
-                DOMSource source = new DOMSource(xmlDocument);
-                transformer.transform(source, streamResult);
-        
-                this.writeInFile(filepath, stringWriter);
-
-                
-            } catch (Exception e) {
-                logger.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);            
-            }
-        }
-        private void writeInFile(String filepath, StringWriter stringWriter){
-            try (FileWriter fileWriter = new FileWriter(filepath)) {
-                
-                // Write the JSON object to the file
-                fileWriter.write(stringWriter.toString());
-            
-                logger.log(Level.INFO, "XML object has been written to {0}", filepath);
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);
-            }
-        }
     }
 }
 
