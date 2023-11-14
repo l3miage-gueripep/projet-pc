@@ -78,7 +78,7 @@ public class JDrawingFrame extends JFrame implements MouseListener, MouseMotionL
     }
 
     private static final long serialVersionUID = 1L;
-
+//test
     private JToolBar toolbar;
 
     private Shapes selected;
