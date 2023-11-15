@@ -16,11 +16,13 @@ public interface SimpleShape extends Visitable {
      */
     public abstract void draw(Graphics2D g2);
 
-    public abstract void changeCoordinates(int x, int y);
+    public abstract void setCoordinates(int x, int y);
 
     public abstract int getX();
 
     public abstract int getY();
 
     public abstract boolean isInside(int x, int y);
+
+    public abstract int getSize();
 }

@@ -33,17 +33,16 @@ import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
  */
 public class Square implements SimpleShape {
-
     private int x;
-
     private int y;
+    private int size = 50;
 
     private Rectangle2D rectangle;
 
     public Square(int x, int y) {
         this.x = x - 25;
         this.y = y - 25;
-        this.rectangle = new Rectangle2D.Double(x, y, 50, 50);
+        this.rectangle = new Rectangle2D.Double(this.x, this.y, size, size);
     }
 
     /**
@@ -83,9 +82,13 @@ public class Square implements SimpleShape {
     }
 
     @Override
-    public void changeCoordinates(int x, int y) {
-        this.x = x - 25;
-        this.y = y - 25;
-        this.rectangle.setRect(x, y, 50, 50);
+    public void setCoordinates(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.rectangle.setRect(x, y, size, size);
+    }
+
+    public int getSize() {
+        return this.size;
     }
 }

@@ -34,12 +34,14 @@ public class Circle implements SimpleShape {
 
     private int y;
 
+    private int size = 50;
+
     private Ellipse2D circle;
 
     public Circle(int x, int y) {
-        this.x = x - 25;
-        this.y = y - 25;
-        this.circle = new Ellipse2D.Double(x, y, 50, 50);
+        this.x = x - size/2;
+        this.y = y - size/2;
+        this.circle = new Ellipse2D.Double(this.x, this.y, size, size);
     }
 
     /**
@@ -77,11 +79,18 @@ public class Circle implements SimpleShape {
     }
 
     @Override
-    public void changeCoordinates(int x, int y) {
-        this.x = x - 25;
-        this.y = y - 25;
-        this.circle = new Ellipse2D.Double(x, y, 50, 50);
+    public void setCoordinates(int x, int y) {
+        this.x = x;
+        this.y = y;
+        this.circle.setFrame(x, y, size, size);
     }
+
+    @Override
+    public int getSize() {
+        return this.size;
+    }
+
+    
 
     
 }

@@ -27,17 +27,11 @@ import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 
-/**
- * This inner class implements the triangle <tt>SimpleShape</tt> service.
- * It simply provides a <tt>draw()</tt> that paints a triangle.
- *
- * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
- */
+
 public class Triangle implements SimpleShape  {
-
     private int x;
-
     private int y;
+    private int size = 50;
 
     private GeneralPath triangle;
 
@@ -45,23 +39,14 @@ public class Triangle implements SimpleShape  {
     private int[] ycoords;
 
     public Triangle(int x, int y) {
-        this.x = x - 25;
-        this.y = y - 25;
-        xcoords = new int[]{x, x - 25, x + 25 };
-        ycoords = new int[]{ y - 25, y + 25, y + 25 };
-        this.triangle = new GeneralPath(Path2D.WIND_EVEN_ODD, xcoords.length);
+        setCoordinates(x, y);
     }
 
-    /**
-     * Implements the <tt>SimpleShape.draw()</tt> method for painting
-     * the shape.
-     * @param g2 The graphics object used for painting.
-     */
     public void draw(Graphics2D g2) {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         GradientPaint gradient = new GradientPaint(x,  y, Color.GREEN,  (float)x + 50,  y, Color.WHITE);
         g2.setPaint(gradient);
-        triangle.moveTo((float)x + 50, y + 50);
+        triangle.moveTo((float)x + 25, y + 25);
         for (int i = 0; i < xcoords.length; i++) {
             triangle.lineTo(xcoords[i], ycoords[i]);
         }
@@ -95,11 +80,15 @@ public class Triangle implements SimpleShape  {
 
 
     @Override
-    public void changeCoordinates(int x, int y) {
-        this.x = x - 25;
-        this.y = y - 25;
-        xcoords = new int[]{x, x - 25, x + 25 };
-        ycoords = new int[]{ y - 25, y + 25, y + 25 };
+    public void setCoordinates(int x, int y) {
+        this.x = x;
+        this.y = y;
+        xcoords = new int[]{x, x - size/2, x + size/2};
+        ycoords = new int[]{y - size/2, y + size/2, y + size/2};
         this.triangle = new GeneralPath(Path2D.WIND_EVEN_ODD, xcoords.length);
+    }
+
+    public int getSize() {
+        return this.size;
     }
 }

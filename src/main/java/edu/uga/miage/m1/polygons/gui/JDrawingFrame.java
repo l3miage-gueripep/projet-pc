@@ -1,27 +1,16 @@
 package edu.uga.miage.m1.polygons.gui;
 
-import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.Iterator;
 import java.util.List;
-import javax.swing.AbstractAction;
+
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,64 +21,42 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
-import edu.uga.miage.m1.polygons.gui.commands.DrawShapeCommand;
+
+import edu.uga.miage.m1.polygons.gui.listeners.CursorButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.PanelMouseListener;
-import edu.uga.miage.m1.polygons.gui.listeners.ShapeActionListener;
+import edu.uga.miage.m1.polygons.gui.listeners.ShapeButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.UndoAction;
 import edu.uga.miage.m1.polygons.gui.listeners.exports.JsonActionListener;
 import edu.uga.miage.m1.polygons.gui.listeners.exports.XMLActionListener;
-import edu.uga.miage.m1.polygons.gui.shapes.Circle;
 import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
-import edu.uga.miage.m1.polygons.gui.shapes.Square;
-import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-
-                 
-/**
- * This class represents the main application class, which is a JFrame subclass
- * that manages a toolbar of shapes and a drawing canvas.
- *
- * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
- */
 public class JDrawingFrame extends JFrame {
     private static final long serialVersionUID = 1L;
     private JToolBar toolbar;
-    private Shapes selected;
+    private Shapes shapeSelected;
     private JPanel panel;
     private JLabel label;
     private List<SimpleShape> drawnShapes = new ArrayList<>();
-    private static final Logger logger = Logger.getLogger(JDrawingFrame.class.getName());
     private transient DrawTool drawTool;
-    private SimpleShape movingShape;
-
-    /**
-     * Tracks buttons to manage the background.
-     */
     private EnumMap<Shapes, JButton> buttons = new EnumMap<>(Shapes.class);
 
-    private transient ActionListener reusableActionListener = new ShapeActionListener(this);
+    private transient ShapeButtonListener shapeButtonListener = new ShapeButtonListener(this);
     private transient JsonActionListener jsonActionListener = new JsonActionListener(this);
     private transient XMLActionListener xmlActionListener = new XMLActionListener(this);
-    private transient CursorActionListener cursorActionListener = new CursorActionListener(this);
+    private transient CursorButtonListener cursorActionListener = new CursorButtonListener(this);
+    private transient PanelMouseListener panelMouseListener = new PanelMouseListener(this);
     
 
     public JDrawingFrame(String frameName) {
         super(frameName);
         initializeLayout();
-        // Add shapes in the menu
-        addShapes();
+        addShapesButtons();
         addCursorButton();
-        setPreferredSize(new Dimension(700, 700));
-
         addExportButtons();
-
-        toolbar.validate();
-        repaint();
-        this.drawTool = new DrawTool();
         addUndoAction();
+        drawTool = new DrawTool();
+        repaint();
     }
 
     public DrawTool getDrawTool() {
@@ -100,11 +67,13 @@ public class JDrawingFrame extends JFrame {
         toolbar = new JToolBar("Toolbar");
         panel = initializePanel();
         label = new JLabel(" ", SwingConstants.LEFT);
-        // Fills the panel
         setLayout(new BorderLayout());
         add(toolbar, BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
         add(label, BorderLayout.SOUTH);
+        toolbar.validate();
+        setPreferredSize(new Dimension(700, 700));
+
     }
 
 
@@ -113,18 +82,30 @@ public class JDrawingFrame extends JFrame {
         panel.setBackground(Color.WHITE);
         panel.setLayout(null);
         panel.setMinimumSize(new Dimension(700, 700));
-        
-        panel.addMouseListener(new PanelMouseListener(this));
+        panelMouseListener = new PanelMouseListener(this);
+        panel.addMouseListener(panelMouseListener);
+        cursorActionListener.setPanelMouseListener(panelMouseListener);
+        shapeButtonListener.setPanelMouseListener(panelMouseListener);
         return panel;
-        // panel.addMouseMotionListener(this);
     }
 
 
 
-    private void addShapes() {
+    private void addShapesButtons() {
         addShapeButton(Shapes.SQUARE, new ImageIcon(getClass().getResource("images/square.png")));
         addShapeButton(Shapes.TRIANGLE, new ImageIcon(getClass().getResource("images/triangle.png")));
         addShapeButton(Shapes.CIRCLE, new ImageIcon(getClass().getResource("images/circle.png")));
+    }
+
+    private void addShapeButton(Shapes shape, ImageIcon icon) {
+        JButton button = new JButton(icon);
+        button.setBorderPainted(false);
+        buttons.put(shape, button);
+        button.setActionCommand(shape.toString());
+        button.addActionListener(shapeButtonListener);
+        toolbar.add(button);
+        toolbar.validate();
+        repaint();
     }
 
     private void addExportButtons() {
@@ -143,23 +124,6 @@ public class JDrawingFrame extends JFrame {
         panel.getActionMap().put("undo", undoAction);
     }
 
-    public List<SimpleShape> getDrawnShapes() {
-        return drawnShapes;
-    }
-    public EnumMap<Shapes, JButton> getButtons() {
-        return buttons;
-    }
-    public Shapes getSelected() {
-        return selected;
-    }
-
-    public JPanel getPanel() {
-        return panel;
-    }
-
-    public void setSelected(Shapes selected) {
-        this.selected = selected;
-    }
 
     private void addCursorButton(){
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("images/cursor.png"));
@@ -171,71 +135,23 @@ public class JDrawingFrame extends JFrame {
         cursorButton.setPreferredSize(new Dimension(50, 50));
     }
 
-    private void addShapeButton(Shapes shape, ImageIcon icon) {
-        JButton button = new JButton(icon);
-        button.setBorderPainted(false);
-        buttons.put(shape, button);
-        button.setActionCommand(shape.toString());
-        button.addActionListener(reusableActionListener);
-        if (selected == null) {
-            button.doClick();
-        }
-        toolbar.add(button);
-        toolbar.validate();
-        repaint();
+
+
+    public List<SimpleShape> getDrawnShapes() {
+        return drawnShapes;
+    }
+    public EnumMap<Shapes, JButton> getButtons() {
+        return buttons;
+    }
+    public Shapes getShapeSelected() {
+        return shapeSelected;
+    }
+    public JPanel getPanel() {
+        return panel;
     }
 
-    public void mouseExited(MouseEvent evt) {
-        label.setText(" ");
-        label.repaint();
-    }
-
-    private class CursorActionListener implements ActionListener {
-
-        JDrawingFrame jDrawingFrame;
-
-        public CursorActionListener(JDrawingFrame jDrawingFrame){
-            super();
-            this.jDrawingFrame = jDrawingFrame;
-        }
-
-        public void actionPerformed(ActionEvent evt) {
-            panel.setCursor(new Cursor(Cursor.MOVE_CURSOR));
-            selected = null;
-            System.out.println(evt.toString());
-            panel.addMouseListener(new MouseListener() {
-                @Override
-                public void mouseClicked(MouseEvent e) {}
-            
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    movingShape = null;
-                    for(SimpleShape shape : jDrawingFrame.getDrawnShapes()){
-                        if(shape.isInside(e.getX(), e.getY())){
-                            System.out.println("shape selected");
-                            movingShape = shape;
-
-                        }
-                    }
-                }
-            
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    System.out.println("mouseReleased");
-                    drawTool.commands.stream().filter(command -> command.getShape() == movingShape).forEach(command -> {
-                        command.getShape().changeCoordinates(e.getX(), e.getY());
-                    });
-                    repaint();
-                    drawTool.play();
-                }
-            
-                @Override
-                public void mouseEntered(MouseEvent e) {}
-            
-                @Override
-                public void mouseExited(MouseEvent e) {}
-            });
-        }
+    public void setShapeSelected(Shapes selected) {
+        this.shapeSelected = selected;
     }
 }
 
