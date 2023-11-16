@@ -36,7 +36,6 @@ public class PanelMouseListener implements MouseListener {
         if (panel.contains(evt.getX(), evt.getY()) && selected != null) {
             Graphics2D g2 = (Graphics2D) panel.getGraphics();
             SimpleShape shape = null;
-
             switch(selected) {
                 case CIRCLE:
                     shape = new Circle(evt.getX(), evt.getY());
@@ -65,14 +64,11 @@ public class PanelMouseListener implements MouseListener {
         startMovingShape(e);
     }
 
-
-
     @Override
     public void mouseReleased(MouseEvent e) {
         if(!dragShapesMode) return;        
         moveShape(e.getX(), e.getY());
     }
-
     
     @Override
     public void mouseEntered(MouseEvent e) {
@@ -84,17 +80,14 @@ public class PanelMouseListener implements MouseListener {
         // do nothing
     }
 
-
-
     private void startMovingShape(MouseEvent e) {
         movingShape = null;
         for(SimpleShape shape : jDrawingFrame.getDrawnShapes()){
             if(shape.isInside(e.getX(), e.getY())){
-                changeShapeSize(shape, shape.getSize() + onDragSizeChange);
                 movingShape = shape;
             }
         }
-
+        changeShapeSize(movingShape, movingShape.getSize() + onDragSizeChange);
     }
 
     private void moveShape(int x, int y) {
@@ -108,7 +101,6 @@ public class PanelMouseListener implements MouseListener {
         drawTool.play();
         jDrawingFrame.repaint();
         changeShapeSize(movingShape, movingShape.getSize());
-
         movingShape = null;   
     }
 
@@ -116,8 +108,6 @@ public class PanelMouseListener implements MouseListener {
         Graphics2D g2 = (Graphics2D) jDrawingFrame.getPanel().getGraphics();
         shape.applySize(g2, newSize);
     }
-
-
 
     public void setDragShapesMode(boolean dragShapesMode) {
         this.dragShapesMode = dragShapesMode;
