@@ -2,5 +2,5 @@ package edu.uga.miage.m1.polygons.gui.shapes;
 
 public enum Shapes {
 
-    SQUARE, TRIANGLE, CIRCLE
+    SQUARE, TRIANGLE, CIRCLE, CUBE
 }
