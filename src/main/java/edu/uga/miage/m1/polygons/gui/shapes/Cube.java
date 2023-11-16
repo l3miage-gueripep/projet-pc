@@ -49,7 +49,14 @@ public class Cube implements SimpleShape {
 
     @Override
     public boolean isInside(int x, int y) {
-        // TODO
+        int[] verticesX = {this.x, this.x + size, this.x + size, this.x, this.x, this.x + size, this.x + size, this.x};
+        int[] verticesY = {this.y, this.y, this.y + size, this.y + size, this.y, this.y, this.y + size, this.y + size};
+        for (int i = 0, j = verticesX.length - 1; i < verticesX.length; j = i++) {
+            if ((verticesY[i] > y) != (verticesY[j] > y) &&
+                    (x < (verticesX[j] - verticesX[i]) * (y - verticesY[i]) / (verticesY[j] - verticesY[i]) + verticesX[i])) {
+                return true;
+            }
+        }
         return false;
     }
 
