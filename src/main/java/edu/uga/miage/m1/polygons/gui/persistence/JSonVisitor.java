@@ -52,7 +52,8 @@ public class JSonVisitor implements Visitor {
 
     @Override
     public void visit(Cube cube) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visit'");
+        jsonObjectBuilder.add("type", "cube")
+                .add("x", cube.getX())
+                .add("y", cube.getY());
     }
 }

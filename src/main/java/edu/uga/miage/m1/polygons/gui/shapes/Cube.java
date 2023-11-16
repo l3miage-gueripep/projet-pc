@@ -49,9 +49,9 @@ public class Cube implements SimpleShape {
 
     @Override
     public boolean isInside(int x, int y) {
-        return x >= this.x && x <= this.x + size &&
-        y >= this.y && y <= this.y + size;
-    }
+            return x >= this.x - 30 && x <= (this.x + size +30) && y >= this.y - 30 && y <= (this.y + size + 30);
+}
+
 
     @Override
     public int getSize() {
@@ -65,6 +65,7 @@ public class Cube implements SimpleShape {
 
     @Override
     public void applySize(Graphics2D g2, int newSize) {
+        //indisponible pour les cubes
         return;
     }
     

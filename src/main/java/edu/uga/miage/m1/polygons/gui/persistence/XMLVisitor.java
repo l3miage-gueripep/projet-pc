@@ -106,7 +106,6 @@ public class XMLVisitor implements Visitor {
 
     @Override
     public void visit(Cube cube) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'visit'");
+        rootElement = createShapeElement("cube", cube.getX(), cube.getY());
     }
 }
