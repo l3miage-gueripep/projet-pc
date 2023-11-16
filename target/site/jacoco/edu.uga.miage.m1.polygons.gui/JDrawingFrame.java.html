@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JDrawingFrame.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">persistence_g2_7</a> &gt; <a href="index.source.html" class="el_package">edu.uga.miage.m1.polygons.gui</a> &gt; <span class="el_source">JDrawingFrame.java</span></div><h1>JDrawingFrame.java</h1><pre class="source lang-java linenums">package edu.uga.miage.m1.polygons.gui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
+
+import edu.uga.miage.m1.polygons.gui.listeners.CursorButtonListener;
+import edu.uga.miage.m1.polygons.gui.listeners.PanelMouseListener;
+import edu.uga.miage.m1.polygons.gui.listeners.ShapeButtonListener;
+import edu.uga.miage.m1.polygons.gui.listeners.UndoAction;
+import edu.uga.miage.m1.polygons.gui.listeners.exports.JsonActionListener;
+import edu.uga.miage.m1.polygons.gui.listeners.exports.XMLActionListener;
+import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
+import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
+
+public class JDrawingFrame extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private JToolBar toolbar;
+    private Shapes shapeSelected;
+    private JPanel panel;
+    private JLabel label;
+<span class="nc" id="L39">    private List&lt;SimpleShape&gt; drawnShapes = new ArrayList&lt;&gt;();</span>
+    private transient DrawTool drawTool;
+<span class="nc" id="L41">    private EnumMap&lt;Shapes, JButton&gt; buttons = new EnumMap&lt;&gt;(Shapes.class);</span>
+
+<span class="nc" id="L43">    private transient ShapeButtonListener shapeButtonListener = new ShapeButtonListener(this);</span>
+<span class="nc" id="L44">    private transient JsonActionListener jsonActionListener = new JsonActionListener(this);</span>
+<span class="nc" id="L45">    private transient XMLActionListener xmlActionListener = new XMLActionListener(this);</span>
+<span class="nc" id="L46">    private transient CursorButtonListener cursorActionListener = new CursorButtonListener(this);</span>
+<span class="nc" id="L47">    private transient PanelMouseListener panelMouseListener = new PanelMouseListener(this);</span>
+    
+
+    
+    public JDrawingFrame(String frameName) {
+<span class="nc" id="L52">        super(frameName);</span>
+<span class="nc" id="L53">        initializeLayout();</span>
+<span class="nc" id="L54">        addShapesButtons();</span>
+<span class="nc" id="L55">        addCursorButton();</span>
+<span class="nc" id="L56">        addExportButtons();</span>
+<span class="nc" id="L57">        addUndoAction();</span>
+<span class="nc" id="L58">        drawTool = new DrawTool();</span>
+<span class="nc" id="L59">        repaint();</span>
+<span class="nc" id="L60">    }</span>
+
+    public DrawTool getDrawTool() {
+<span class="nc" id="L63">        return drawTool;</span>
+    }
+
+    private void initializeLayout() {
+<span class="nc" id="L67">        toolbar = new JToolBar(&quot;Toolbar&quot;);</span>
+<span class="nc" id="L68">        panel = initializePanel();</span>
+<span class="nc" id="L69">        label = new JLabel(&quot; &quot;, SwingConstants.LEFT);</span>
+<span class="nc" id="L70">        setLayout(new BorderLayout());</span>
+<span class="nc" id="L71">        add(toolbar, BorderLayout.NORTH);</span>
+<span class="nc" id="L72">        add(panel, BorderLayout.CENTER);</span>
+<span class="nc" id="L73">        add(label, BorderLayout.SOUTH);</span>
+<span class="nc" id="L74">        toolbar.validate();</span>
+<span class="nc" id="L75">        setPreferredSize(new Dimension(700, 700));</span>
+
+<span class="nc" id="L77">    }</span>
+
+
+    private JPanel initializePanel() {
+<span class="nc" id="L81">        JPanel panel = new DrawingPanel(this);</span>
+<span class="nc" id="L82">        panel.setBackground(Color.WHITE);</span>
+<span class="nc" id="L83">        panel.setLayout(null);</span>
+<span class="nc" id="L84">        panel.setMinimumSize(new Dimension(700, 700));</span>
+<span class="nc" id="L85">        panelMouseListener = new PanelMouseListener(this);</span>
+<span class="nc" id="L86">        panel.addMouseListener(panelMouseListener);</span>
+<span class="nc" id="L87">        cursorActionListener.setPanelMouseListener(panelMouseListener);</span>
+<span class="nc" id="L88">        shapeButtonListener.setPanelMouseListener(panelMouseListener);</span>
+<span class="nc" id="L89">        return panel;</span>
+    }
+
+
+
+    private void addShapesButtons() {
+<span class="nc" id="L95">        addShapeButton(Shapes.SQUARE, new ImageIcon(getClass().getResource(&quot;images/square.png&quot;)));</span>
+<span class="nc" id="L96">        addShapeButton(Shapes.TRIANGLE, new ImageIcon(getClass().getResource(&quot;images/triangle.png&quot;)));</span>
+<span class="nc" id="L97">        addShapeButton(Shapes.CIRCLE, new ImageIcon(getClass().getResource(&quot;images/circle.png&quot;)));</span>
+<span class="nc" id="L98">        addShapeButton(Shapes.CUBE, new ImageIcon(getClass().getResource(&quot;images/underc.png&quot;)));</span>
+<span class="nc" id="L99">    }</span>
+
+    private void addShapeButton(Shapes shape, ImageIcon icon) {
+<span class="nc" id="L102">        JButton button = new JButton(icon);</span>
+<span class="nc" id="L103">        button.setBorderPainted(false);</span>
+<span class="nc" id="L104">        buttons.put(shape, button);</span>
+<span class="nc" id="L105">        button.setActionCommand(shape.toString());</span>
+<span class="nc" id="L106">        button.addActionListener(shapeButtonListener);</span>
+<span class="nc" id="L107">        toolbar.add(button);</span>
+<span class="nc" id="L108">        toolbar.validate();</span>
+<span class="nc" id="L109">        repaint();</span>
+<span class="nc" id="L110">    }</span>
+
+    private void addExportButtons() {
+<span class="nc" id="L113">        JButton jsonButton = new JButton(&quot;Convertir en JSON&quot;);</span>
+<span class="nc" id="L114">        JButton xmlButton = new JButton(&quot;Convertir en XML&quot;);</span>
+<span class="nc" id="L115">        jsonButton.addActionListener(jsonActionListener);</span>
+<span class="nc" id="L116">        toolbar.add(jsonButton);</span>
+<span class="nc" id="L117">        xmlButton.addActionListener(xmlActionListener);</span>
+<span class="nc" id="L118">        toolbar.add(xmlButton);</span>
+<span class="nc" id="L119">    }</span>
+
+    private void addUndoAction()  {
+<span class="nc" id="L122">        Action undoAction = new UndoAction(&quot;Undo&quot;, this);</span>
+<span class="nc" id="L123">        KeyStroke ctrlZKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());</span>
+<span class="nc" id="L124">        panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlZKeyStroke, &quot;undo&quot;);</span>
+<span class="nc" id="L125">        panel.getActionMap().put(&quot;undo&quot;, undoAction);</span>
+<span class="nc" id="L126">    }</span>
+
+
+    private void addCursorButton(){
+<span class="nc" id="L130">        ImageIcon originalIcon = new ImageIcon(getClass().getResource(&quot;images/cursor.png&quot;));</span>
+<span class="nc" id="L131">        Image scaledImage = originalIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);</span>
+<span class="nc" id="L132">        ImageIcon resizedIcon = new ImageIcon(scaledImage);</span>
+<span class="nc" id="L133">        JButton cursorButton = new JButton(resizedIcon);</span>
+<span class="nc" id="L134">        cursorButton.addActionListener(cursorActionListener);</span>
+<span class="nc" id="L135">        toolbar.add(cursorButton);</span>
+<span class="nc" id="L136">        cursorButton.setPreferredSize(new Dimension(50, 50));</span>
+<span class="nc" id="L137">    }</span>
+
+
+
+    public List&lt;SimpleShape&gt; getDrawnShapes() {
+<span class="nc" id="L142">        return drawnShapes;</span>
+    }
+    public EnumMap&lt;Shapes, JButton&gt; getButtons() {
+<span class="nc" id="L145">        return buttons;</span>
+    }
+    public Shapes getShapeSelected() {
+<span class="nc" id="L148">        return shapeSelected;</span>
+    }
+    public JPanel getPanel() {
+<span class="nc" id="L151">        return panel;</span>
+    }
+
+    public void setShapeSelected(Shapes selected) {
+<span class="nc" id="L155">        this.shapeSelected = selected;</span>
+<span class="nc" id="L156">    }</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

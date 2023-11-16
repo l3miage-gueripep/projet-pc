@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Cube.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">persistence_g2_7</a> &gt; <a href="index.source.html" class="el_package">edu.uga.miage.m1.polygons.gui.shapes</a> &gt; <span class="el_source">Cube.java</span></div><h1>Cube.java</h1><pre class="source lang-java linenums">package edu.uga.miage.m1.polygons.gui.shapes;
+
+import java.awt.Graphics2D;
+
+import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
+import edu.uga.singleshape.CubePanel;
+
+public class Cube implements SimpleShape {
+
+    private int x;
+    private int y;
+<span class="nc" id="L12">    private int size = 50;</span>
+
+    CubePanel cube;
+
+<span class="nc" id="L16">    public Cube(int x, int y) {</span>
+<span class="nc" id="L17">        this.x = x - size/2;</span>
+<span class="nc" id="L18">        this.y = y - size/2;</span>
+<span class="nc" id="L19">    }</span>
+
+
+    @Override
+    public void accept(Visitor visitor) {
+<span class="nc" id="L24">        visitor.visit(this);</span>
+<span class="nc" id="L25">    }</span>
+
+    @Override
+    public void draw(Graphics2D g2) {
+<span class="nc" id="L29">        Graphics2D g2d = (Graphics2D) g2;</span>
+<span class="nc" id="L30">        cube = new CubePanel(100, x, y);</span>
+<span class="nc" id="L31">        cube.paintComponent(g2d);</span>
+<span class="nc" id="L32">    }</span>
+
+    @Override
+    public void setCoordinates(int x, int y) {
+<span class="nc" id="L36">        this.x = x - size/2;</span>
+<span class="nc" id="L37">        this.y = y - size/2;</span>
+<span class="nc" id="L38">    }</span>
+
+    @Override
+    public int getX() {
+<span class="nc" id="L42">        return this.x;</span>
+    }
+
+    @Override
+    public int getY() {
+<span class="nc" id="L47">        return this.y;</span>
+    }
+
+    @Override
+    public boolean isInside(int x, int y) {
+<span class="nc bnc" id="L52" title="All 8 branches missed.">            return x &gt;= this.x - 30 &amp;&amp; x &lt;= (this.x + size +30) &amp;&amp; y &gt;= this.y - 30 &amp;&amp; y &lt;= (this.y + size + 30);</span>
+}
+
+
+    @Override
+    public int getSize() {
+<span class="nc" id="L58">        return this.size;</span>
+    }
+
+    @Override
+    public void setSize(int size) {
+<span class="nc" id="L63">        this.size = size;</span>
+<span class="nc" id="L64">    }</span>
+
+    @Override
+    public void applySize(Graphics2D g2, int newSize) {
+<span class="nc" id="L68">        return;</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

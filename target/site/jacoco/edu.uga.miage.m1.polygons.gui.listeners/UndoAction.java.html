@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UndoAction.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">persistence_g2_7</a> &gt; <a href="index.source.html" class="el_package">edu.uga.miage.m1.polygons.gui.listeners</a> &gt; <span class="el_source">UndoAction.java</span></div><h1>UndoAction.java</h1><pre class="source lang-java linenums">package edu.uga.miage.m1.polygons.gui.listeners;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
+import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
+import edu.uga.miage.m1.polygons.gui.commands.DrawShapeCommand;
+
+public class UndoAction extends AbstractAction {
+    private JDrawingFrame jDrawingFrame;
+
+    public UndoAction(String name, JDrawingFrame jDrawingFrame) {
+<span class="nc" id="L11">        super(name);</span>
+<span class="nc" id="L12">        this.jDrawingFrame = jDrawingFrame;</span>
+<span class="nc" id="L13">    }</span>
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L17">        var drawTool = jDrawingFrame.getDrawTool();</span>
+<span class="nc" id="L18">        var lastCommand = drawTool.getLastCommand();</span>
+<span class="nc" id="L19">        drawTool.removeLastCommand();</span>
+<span class="nc" id="L20">        var drawnShapes = jDrawingFrame.getDrawnShapes();</span>
+
+<span class="nc bnc" id="L22" title="All 4 branches missed.">        boolean isLastCommandDrawShapeCommand = !drawnShapes.isEmpty() &amp;&amp; lastCommand instanceof DrawShapeCommand;</span>
+<span class="nc bnc" id="L23" title="All 2 branches missed.">        if(isLastCommandDrawShapeCommand){</span>
+<span class="nc" id="L24">            drawnShapes.remove(drawnShapes.size()-1);</span>
+        }
+        
+<span class="nc" id="L27">        drawTool.play();</span>
+<span class="nc" id="L28">        jDrawingFrame.repaint();</span>
+
+<span class="nc" id="L30">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

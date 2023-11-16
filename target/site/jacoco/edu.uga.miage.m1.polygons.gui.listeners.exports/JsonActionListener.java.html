@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JsonActionListener.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">persistence_g2_7</a> &gt; <a href="index.source.html" class="el_package">edu.uga.miage.m1.polygons.gui.listeners.exports</a> &gt; <span class="el_source">JsonActionListener.java</span></div><h1>JsonActionListener.java</h1><pre class="source lang-java linenums">package edu.uga.miage.m1.polygons.gui.listeners.exports;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
+import edu.uga.miage.m1.polygons.gui.persistence.JSonVisitor;
+import edu.uga.miage.m1.polygons.gui.persistence.Visitable;
+
+public class JsonActionListener implements ActionListener {
+
+<span class="nc" id="L18">    private static final Logger logger = Logger.getLogger(JsonActionListener.class.getName());</span>
+    private static final String GENERIC_ERROR_MESSAGE = &quot;An error occured while exporting the JSON file&quot;;
+
+    JDrawingFrame jDrawingFrame;
+
+    public JsonActionListener(JDrawingFrame jDrawingFrame){
+<span class="nc" id="L24">        super();</span>
+<span class="nc" id="L25">        this.jDrawingFrame = jDrawingFrame;</span>
+<span class="nc" id="L26">    }</span>
+
+<span class="nc" id="L28">    private JSonVisitor jSonVisitor = new JSonVisitor();</span>
+<span class="nc" id="L29">    JsonArrayBuilder jsonArray = Json.createArrayBuilder();</span>
+    public void actionPerformed(ActionEvent evt) {
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        for(Visitable shape : jDrawingFrame.getDrawnShapes()){</span>
+            // ItÃÂÃÂ¨re sur tous les boutons
+<span class="nc" id="L33">            shape.accept(jSonVisitor);</span>
+<span class="nc" id="L34">            jsonArray.add(jSonVisitor.getJsonObject());</span>
+<span class="nc" id="L35">        }</span>
+<span class="nc" id="L36">        JsonObject jsonObject = Json.createObjectBuilder()</span>
+<span class="nc" id="L37">            .add(&quot;shapes&quot;, jsonArray)</span>
+<span class="nc" id="L38">            .build();</span>
+<span class="nc" id="L39">        this.writeInFile(&quot;exports/export.json&quot;, jsonObject);</span>
+<span class="nc" id="L40">    }</span>
+
+
+    private void writeInFile(String filepath, JsonObject jsonObject){
+<span class="nc" id="L44">        try  (FileWriter fileWriter = new FileWriter(filepath)) {</span>
+        
+            // Write the JSON object to the file
+<span class="nc" id="L47">            fileWriter.write(jsonObject.toString());</span>
+        
+<span class="nc" id="L49">            logger.log(Level.INFO, &quot;JSON object has been written to {0}&quot;, filepath);</span>
+<span class="nc" id="L50">        } catch (IOException e) {</span>
+<span class="nc" id="L51">            logger.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);</span>
+<span class="nc" id="L52">        }</span>
+<span class="nc" id="L53">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
