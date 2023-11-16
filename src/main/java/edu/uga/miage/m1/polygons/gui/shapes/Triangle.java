@@ -92,7 +92,7 @@ public class Triangle implements SimpleShape  {
         return this.size;
     }
 
-    public void changeSize(Graphics2D g2, int size) {
+    public void applySize(Graphics2D g2, int size) {
         
         int halfDifference = 0;
         if(size > this.size){
@@ -101,5 +101,10 @@ public class Triangle implements SimpleShape  {
         this.size = size;
         this.setCoordinates(x-halfDifference, y-halfDifference);
         draw(g2);
+    }
+
+    @Override
+    public void setSize(int size) {
+        this.size = size;
     }
 }

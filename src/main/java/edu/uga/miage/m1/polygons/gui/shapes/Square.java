@@ -92,7 +92,7 @@ public class Square implements SimpleShape {
         return this.size;
     }
 
-    public void changeSize(Graphics2D g2, int size) {
+    public void applySize(Graphics2D g2, int size) {
         int halfDifference = 0;
         if(size > this.size){
             halfDifference = (size - this.size)/2;
@@ -100,5 +100,10 @@ public class Square implements SimpleShape {
         this.size = size;
         this.rectangle.setRect(x - halfDifference, y - halfDifference, size, size);
         draw(g2);
+    }
+
+    @Override
+    public void setSize(int size) {
+        this.size = size;
     }
 }

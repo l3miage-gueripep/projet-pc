@@ -101,19 +101,20 @@ public class PanelMouseListener implements MouseListener {
         if(movingShape == null) return;
 
         var drawTool = jDrawingFrame.getDrawTool();
-        changeShapeSize(movingShape, movingShape.getSize() - onDragSizeChange);
+        // needs to do this before actually changing the on screen shape size to move the shape on the right place
+        //changing shape size before repaint = visual glitches
+        movingShape.setSize(movingShape.getSize() - onDragSizeChange);
         drawTool.addCommand(new MoveShapeCommand(movingShape, x, y));
         drawTool.play();
         jDrawingFrame.repaint();
-        
-        movingShape = null;
-        
-                        
+        changeShapeSize(movingShape, movingShape.getSize());
+
+        movingShape = null;   
     }
 
     private void changeShapeSize(SimpleShape shape, int newSize){
         Graphics2D g2 = (Graphics2D) jDrawingFrame.getPanel().getGraphics();
-        shape.changeSize(g2, newSize);
+        shape.applySize(g2, newSize);
     }
 
 
