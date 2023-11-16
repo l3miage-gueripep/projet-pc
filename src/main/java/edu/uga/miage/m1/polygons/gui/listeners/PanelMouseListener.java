@@ -20,6 +20,8 @@ public class PanelMouseListener implements MouseListener {
     private boolean dragShapesMode;
     private SimpleShape movingShape;
 
+    private final int onDragSizeChange = 10;
+
     private static final Logger logger = Logger.getLogger(PanelMouseListener.class.getName());
 
     public PanelMouseListener(JDrawingFrame jDrawingFrame) {
@@ -48,10 +50,10 @@ public class PanelMouseListener implements MouseListener {
                 default:
                     logger.log(Level.FINE, "No shape named {0}", selected);
             }
-            DrawShapeCommand cDrawShape = new DrawShapeCommand(shape, g2);
+            DrawShapeCommand drawShapeCommand = new DrawShapeCommand(shape, g2);
 
             var drawTool = jDrawingFrame.getDrawTool();
-            drawTool.addCommand(cDrawShape);
+            drawTool.addCommand(drawShapeCommand);
             jDrawingFrame.getDrawnShapes().add(shape);
             drawTool.play();
         }
@@ -88,18 +90,30 @@ public class PanelMouseListener implements MouseListener {
         movingShape = null;
         for(SimpleShape shape : jDrawingFrame.getDrawnShapes()){
             if(shape.isInside(e.getX(), e.getY())){
+                changeShapeSize(shape, shape.getSize() + onDragSizeChange);
                 movingShape = shape;
             }
         }
+
     }
 
     private void moveShape(int x, int y) {
         if(movingShape == null) return;
+
         var drawTool = jDrawingFrame.getDrawTool();
+        changeShapeSize(movingShape, movingShape.getSize() - onDragSizeChange);
         drawTool.addCommand(new MoveShapeCommand(movingShape, x, y));
         drawTool.play();
         jDrawingFrame.repaint();
+        
         movingShape = null;
+        
+                        
+    }
+
+    private void changeShapeSize(SimpleShape shape, int newSize){
+        Graphics2D g2 = (Graphics2D) jDrawingFrame.getPanel().getGraphics();
+        shape.changeSize(g2, newSize);
     }
 
 

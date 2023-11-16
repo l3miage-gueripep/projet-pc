@@ -26,5 +26,5 @@ public interface SimpleShape extends Visitable {
 
     public abstract int getSize();
 
-    public abstract void setSize(int size);
+    public abstract void changeSize(Graphics2D g2, int newSize);
 }

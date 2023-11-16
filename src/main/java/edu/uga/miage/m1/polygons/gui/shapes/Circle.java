@@ -87,8 +87,14 @@ public class Circle implements SimpleShape {
     }
 
     @Override
-    public void setSize(int size) {
+    public void changeSize(Graphics2D g2, int size) {
+        int halfDifference = 0;
+        if(size > this.size){
+            halfDifference = (size - this.size)/2;
+        }
         this.size = size;
+        this.circle.setFrame(x - halfDifference, y - halfDifference, size, size);
+        draw(g2);
     }
 
     

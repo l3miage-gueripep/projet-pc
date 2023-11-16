@@ -48,6 +48,7 @@ public class JDrawingFrame extends JFrame {
     private transient PanelMouseListener panelMouseListener = new PanelMouseListener(this);
     
 
+    
     public JDrawingFrame(String frameName) {
         super(frameName);
         initializeLayout();

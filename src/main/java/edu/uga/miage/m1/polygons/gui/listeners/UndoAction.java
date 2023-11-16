@@ -24,7 +24,7 @@ public class UndoAction extends AbstractAction {
             drawnShapes.remove(drawnShapes.size()-1);
         }
         
-        drawTool.play();
+        // drawTool.play();
         jDrawingFrame.repaint();
 
     }
