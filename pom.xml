@@ -30,6 +30,11 @@
 			<version>3.11.2</version> <!-- Use the latest version available -->
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>edu.uga.miage.m1</groupId>
+			<artifactId>edu.uga.singleshape</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
   	<build>
 		<plugins>

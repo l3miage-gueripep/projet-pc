@@ -5,6 +5,7 @@ import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 
 import edu.uga.miage.m1.polygons.gui.shapes.Circle;
+import edu.uga.miage.m1.polygons.gui.shapes.Cube;
 import edu.uga.miage.m1.polygons.gui.shapes.Square;
 import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
 
@@ -47,5 +48,12 @@ public class JSonVisitor implements Visitor {
 
     public JsonObject getJsonObject(){
         return this.jsonObjectBuilder.build();
+    }
+
+    @Override
+    public void visit(Cube cube) {
+        jsonObjectBuilder.add("type", "cube")
+                .add("x", cube.getX())
+                .add("y", cube.getY());
     }
 }

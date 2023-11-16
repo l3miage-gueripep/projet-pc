@@ -17,6 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import edu.uga.miage.m1.polygons.gui.shapes.Circle;
+import edu.uga.miage.m1.polygons.gui.shapes.Cube;
 import edu.uga.miage.m1.polygons.gui.shapes.Square;
 import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
 
@@ -101,5 +102,10 @@ public class XMLVisitor implements Visitor {
             logger.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);
             return null;
         }
+    }
+
+    @Override
+    public void visit(Cube cube) {
+        rootElement = createShapeElement("cube", cube.getX(), cube.getY());
     }
 }

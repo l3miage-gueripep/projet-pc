@@ -95,6 +95,7 @@ public class JDrawingFrame extends JFrame {
         addShapeButton(Shapes.SQUARE, new ImageIcon(getClass().getResource("images/square.png")));
         addShapeButton(Shapes.TRIANGLE, new ImageIcon(getClass().getResource("images/triangle.png")));
         addShapeButton(Shapes.CIRCLE, new ImageIcon(getClass().getResource("images/circle.png")));
+        addShapeButton(Shapes.CUBE, new ImageIcon(getClass().getResource("images/underc.png")));
     }
 
     private void addShapeButton(Shapes shape, ImageIcon icon) {

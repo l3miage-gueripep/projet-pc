@@ -10,6 +10,7 @@ import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.commands.DrawShapeCommand;
 import edu.uga.miage.m1.polygons.gui.commands.MoveShapeCommand;
 import edu.uga.miage.m1.polygons.gui.shapes.Circle;
+import edu.uga.miage.m1.polygons.gui.shapes.Cube;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 import edu.uga.miage.m1.polygons.gui.shapes.Square;
 import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
@@ -45,6 +46,9 @@ public class PanelMouseListener implements MouseListener {
                     break;
                 case SQUARE:
                     shape = new Square(evt.getX(), evt.getY());
+                    break;
+                case CUBE:
+                    shape = new Cube(evt.getX(), evt.getY());
                     break;
                 default:
                     logger.log(Level.FINE, "No shape named {0}", selected);
@@ -87,6 +91,7 @@ public class PanelMouseListener implements MouseListener {
                 movingShape = shape;
             }
         }
+        if(movingShape == null) return;
         changeShapeSize(movingShape, movingShape.getSize() + onDragSizeChange);
     }
 
