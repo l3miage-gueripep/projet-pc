@@ -11,6 +11,7 @@ public class DrawShapeCommand implements ShapeCommand {
     private int x;
     private int y;
 
+    private boolean drawn = false;
     private boolean moved = false;
 
     public DrawShapeCommand(SimpleShape shape, Graphics2D g2){
@@ -25,7 +26,10 @@ public class DrawShapeCommand implements ShapeCommand {
         if(!moved){
             this.shape.setCoordinates(x, y);
         }
-        this.shape.draw(g2);
+        if (!drawn) {
+            this.shape.draw(g2);
+            drawn = true;
+        }
     }
 
     @Override

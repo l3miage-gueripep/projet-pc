@@ -25,4 +25,6 @@ public interface SimpleShape extends Visitable {
     public abstract boolean isInside(int x, int y);
 
     public abstract int getSize();
+
+    public abstract void setSize(int size);
 }

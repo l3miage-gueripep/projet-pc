@@ -39,14 +39,15 @@ public class Triangle implements SimpleShape  {
     private int[] ycoords;
 
     public Triangle(int x, int y) {
-        setCoordinates(x, y);
+        setCoordinates(x - size / 2, y - size / 2);
     }
 
     public void draw(Graphics2D g2) {
+        this.triangle = new GeneralPath(Path2D.WIND_EVEN_ODD, xcoords.length);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        GradientPaint gradient = new GradientPaint(x,  y, Color.GREEN,  (float)x + 50,  y, Color.WHITE);
+        GradientPaint gradient = new GradientPaint(x,  y, Color.GREEN,  (float)x + size,  y, Color.WHITE);
         g2.setPaint(gradient);
-        triangle.moveTo((float)x + 25, y + 25);
+        triangle.moveTo((float)x + size, y + size);
         for (int i = 0; i < xcoords.length; i++) {
             triangle.lineTo(xcoords[i], ycoords[i]);
         }
@@ -83,12 +84,15 @@ public class Triangle implements SimpleShape  {
     public void setCoordinates(int x, int y) {
         this.x = x;
         this.y = y;
-        xcoords = new int[]{x, x - size/2, x + size/2};
-        ycoords = new int[]{y - size/2, y + size/2, y + size/2};
-        this.triangle = new GeneralPath(Path2D.WIND_EVEN_ODD, xcoords.length);
+        xcoords = new int[]{x + size/2, x, x + size};
+        ycoords = new int[]{y, y + size, y + size};
     }
 
     public int getSize() {
         return this.size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }

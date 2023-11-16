@@ -52,7 +52,7 @@ public class Square implements SimpleShape {
      */
     public void draw(Graphics2D g2) {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        GradientPaint gradient = new GradientPaint(x, y, Color.BLUE, (float) x + 90, y, Color.WHITE);
+        GradientPaint gradient = new GradientPaint(x, y, Color.BLUE, (float) x + size, y, Color.WHITE);
         g2.setPaint(gradient);
         g2.fill(rectangle);
         BasicStroke wideStroke = new BasicStroke(2.0f);
@@ -90,5 +90,9 @@ public class Square implements SimpleShape {
 
     public int getSize() {
         return this.size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 }
