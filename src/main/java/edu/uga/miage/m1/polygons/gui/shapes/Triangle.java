@@ -93,7 +93,6 @@ public class Triangle implements SimpleShape  {
     }
 
     public void applySize(Graphics2D g2, int size) {
-        
         int halfDifference = 0;
         if(size > this.size){
             halfDifference = (size - this.size)/2;
