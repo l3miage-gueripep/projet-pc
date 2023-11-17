@@ -3,6 +3,7 @@ package edu.uga.miage.m1.polygons.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -46,6 +47,7 @@ public class JDrawingFrame extends JFrame {
     private transient DrawTool drawTool;
     private EnumMap<Shapes, JButton> shapeButtons = new EnumMap<>(Shapes.class);
     private List<GroupButton> groupButtons = new ArrayList<>();
+    private GroupButton currentlySelectedGroupButton;
 
     private transient GroupButtonListener groupButtonListener = new GroupButtonListener(this);
     private transient JsonActionListener jsonActionListener = new JsonActionListener(this);
@@ -76,7 +78,9 @@ public class JDrawingFrame extends JFrame {
     private void createShapeGroupsButtons() {
         for(int i = 0; i < GROUPS_AMOUNT; i++) {
             GroupButton button = new GroupButton("Groupe " + (i+1));
+            
             button.addActionListener(groupButtonListener);
+            groupButtons.add(button);
             groupsToolbar.add(button);
         }
     }
@@ -157,6 +161,14 @@ public class JDrawingFrame extends JFrame {
         cursorButton.setPreferredSize(new Dimension(50, 50));
     }
 
+    public GroupButton getCurrentlySelectedGroupButton(){
+        return currentlySelectedGroupButton;
+    }
+
+    public void setCurrentlySelectedGroupButton(GroupButton currentlySelectedGroupButton) {
+        this.currentlySelectedGroupButton = currentlySelectedGroupButton;
+    }
+
 
 
     public List<SimpleShape> getDrawnShapes() {
@@ -171,9 +183,14 @@ public class JDrawingFrame extends JFrame {
     public DrawingPanel getPanel() {
         return panel;
     }
-
+    public List<GroupButton> getGroupButtons() {
+        return groupButtons;
+    }
     public void setShapeSelected(Shapes selected) {
         this.shapeSelected = selected;
+    }
+    public Graphics2D getGraphics2d(){
+        return (Graphics2D) getGraphics();
     }
 
 

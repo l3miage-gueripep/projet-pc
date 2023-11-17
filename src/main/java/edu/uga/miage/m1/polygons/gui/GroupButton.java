@@ -25,4 +25,8 @@ public class GroupButton extends JButton{
         shapes.remove(shape);
     }
 
+    public List<SimpleShape> getShapes() {
+        return shapes;
+    }
+
 }

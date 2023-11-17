@@ -6,6 +6,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -15,6 +16,8 @@ import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
  * Cette classe représente le panneau de dessin qui affiche les formes dessinées.
  */
 public class DrawingPanel extends JPanel{
+
+    private ArrayList<SimpleShape> currentlySelectedShapes = new ArrayList<>();
 
     public enum Mode {
         DRAW, //clic = draw
@@ -66,5 +69,13 @@ public class DrawingPanel extends JPanel{
             }
         }
         return null;
+    }
+
+    public void addShapeToSelection(SimpleShape shape){
+        currentlySelectedShapes.add(shape);
+    }
+
+    public ArrayList<SimpleShape> getCurrentlySelectedShapes() {
+        return currentlySelectedShapes;
     }
 }

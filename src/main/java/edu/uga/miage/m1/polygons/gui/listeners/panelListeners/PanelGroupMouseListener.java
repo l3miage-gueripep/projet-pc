@@ -19,8 +19,12 @@ public class PanelGroupMouseListener implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         if(jDrawingFrame.getPanel().getMode() != Mode.GROUP) return;
         SimpleShape selectedShape = jDrawingFrame.getPanel().getShapeAtLocation(e.getX(), e.getY());
+        System.out.println(selectedShape);
         if(selectedShape == null) return;
         selectedShape.toggleSelected();
+        // jDrawingFrame.getPanel().addShapeToSelection(selectedShape); //TODO remove this useless list
+        jDrawingFrame.getGroupButtons().get(0).addShape(selectedShape);
+
         jDrawingFrame.getDrawTool().play();
         System.out.println("trouvé!!");
     }
