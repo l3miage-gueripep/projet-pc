@@ -10,5 +10,4 @@ public class App {
     public static void main(String[] args) {
         GUIHelper.showOnFrame("test");
     }
-    //test push
 }

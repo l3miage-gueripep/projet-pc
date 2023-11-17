@@ -22,10 +22,10 @@ public class ShapeButtonListener implements ActionListener {
         panelMouseListener.setDragShapesMode(false);
         var panel = jDrawingFrame.getPanel();
         panel.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-        Iterator<Shapes> keys = jDrawingFrame.getButtons().keySet().iterator();
+        Iterator<Shapes> keys = jDrawingFrame.getShapeButtons().keySet().iterator();
         while (keys.hasNext()) {
             Shapes shape = keys.next();
-            JButton btn = jDrawingFrame.getButtons().get(shape);
+            JButton btn = jDrawingFrame.getShapeButtons().get(shape);
             if (evt.getActionCommand().equals(shape.toString())) {
                 btn.setBorderPainted(true);
                 jDrawingFrame.setShapeSelected(shape);

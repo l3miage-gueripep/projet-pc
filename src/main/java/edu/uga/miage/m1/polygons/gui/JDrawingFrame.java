@@ -22,6 +22,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
 import edu.uga.miage.m1.polygons.gui.listeners.CursorButtonListener;
+import edu.uga.miage.m1.polygons.gui.listeners.GroupButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.PanelMouseListener;
 import edu.uga.miage.m1.polygons.gui.listeners.ShapeButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.UndoAction;
@@ -33,6 +34,7 @@ import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 public class JDrawingFrame extends JFrame {
     private static final long serialVersionUID = 1L;
     private final int FRAME_WIDTH = 700;
+    private final int GROUPS_AMOUNT = 5;
     private JToolBar toolbar;
     private JToolBar groupsToolbar;
     private Shapes shapeSelected;
@@ -40,9 +42,11 @@ public class JDrawingFrame extends JFrame {
     private JLabel label;
     private List<SimpleShape> drawnShapes = new ArrayList<>();
     private transient DrawTool drawTool;
-    private EnumMap<Shapes, JButton> buttons = new EnumMap<>(Shapes.class);
+    private EnumMap<Shapes, JButton> shapeButtons = new EnumMap<>(Shapes.class);
+    private List<GroupButton> groupButtons = new ArrayList<>();
 
     private transient ShapeButtonListener shapeButtonListener = new ShapeButtonListener(this);
+    private transient GroupButtonListener groupButtonListener = new GroupButtonListener(this);
     private transient JsonActionListener jsonActionListener = new JsonActionListener(this);
     private transient XMLActionListener xmlActionListener = new XMLActionListener(this);
     private transient CursorButtonListener cursorActionListener = new CursorButtonListener(this);
@@ -52,6 +56,11 @@ public class JDrawingFrame extends JFrame {
         super(frameName);
         initializeLayout();
         addTopToolbarButtons();
+        
+        //shape groups
+        initializeShapeGroups();
+
+
         addUndoAction();
         drawTool = new DrawTool();
         repaint();
@@ -59,6 +68,19 @@ public class JDrawingFrame extends JFrame {
 
     public DrawTool getDrawTool() {
         return drawTool;
+    }
+
+    private void initializeShapeGroups(){
+        createShapeGroupsButtons();
+    }
+
+    private void createShapeGroupsButtons() {
+        for(int i = 0; i < GROUPS_AMOUNT; i++) {
+            GroupButton button = new GroupButton("Groupe " + (i+1));
+            
+            button.addActionListener(groupButtonListener);
+            groupsToolbar.add(button);
+        }
     }
 
     private void initializeLayout() {
@@ -104,7 +126,7 @@ public class JDrawingFrame extends JFrame {
     private void addShapeButton(Shapes shape, ImageIcon icon) {
         JButton button = new JButton(icon);
         button.setBorderPainted(false);
-        buttons.put(shape, button);
+        shapeButtons.put(shape, button);
         button.setActionCommand(shape.toString());
         button.addActionListener(shapeButtonListener);
         toolbar.add(button);
@@ -144,8 +166,8 @@ public class JDrawingFrame extends JFrame {
     public List<SimpleShape> getDrawnShapes() {
         return drawnShapes;
     }
-    public EnumMap<Shapes, JButton> getButtons() {
-        return buttons;
+    public EnumMap<Shapes, JButton> getShapeButtons() {
+        return shapeButtons;
     }
     public Shapes getShapeSelected() {
         return shapeSelected;

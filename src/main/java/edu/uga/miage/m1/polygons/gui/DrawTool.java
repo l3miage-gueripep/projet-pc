@@ -48,7 +48,7 @@ public class DrawTool {
         return false;
     }
 
-    //sets the move attribute of the DrawShapeCommand that draws the movedShape
+    //change the move attribute of the DrawShapeCommand that draws the movedShape to the right value
     public void setShapeMoved(SimpleShape movedShape, boolean moved) {
         for (ShapeCommand command : commands) {
             if (command instanceof DrawShapeCommand) {
