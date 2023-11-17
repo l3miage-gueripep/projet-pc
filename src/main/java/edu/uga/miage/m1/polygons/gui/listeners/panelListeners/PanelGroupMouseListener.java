@@ -2,7 +2,9 @@ package edu.uga.miage.m1.polygons.gui.listeners.panelListeners;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
+import edu.uga.miage.m1.polygons.gui.GroupButton;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.DrawingPanel.Mode;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
@@ -18,15 +20,20 @@ public class PanelGroupMouseListener implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if(jDrawingFrame.getPanel().getMode() != Mode.GROUP) return;
-        SimpleShape selectedShape = jDrawingFrame.getPanel().getShapeAtLocation(e.getX(), e.getY());
-        System.out.println(selectedShape);
-        if(selectedShape == null) return;
-        selectedShape.toggleSelected();
-        // jDrawingFrame.getPanel().addShapeToSelection(selectedShape); //TODO remove this useless list
-        jDrawingFrame.getGroupButtons().get(0).addShape(selectedShape);
+        SimpleShape clickedShape = jDrawingFrame.getPanel().getShapeAtLocation(e.getX(), e.getY());
+        if(clickedShape == null) return;
+        clickedShape.toggleSelected();
+
+        ArrayList<SimpleShape> selectedShapes = jDrawingFrame.getCurrentlySelectedGroupButton().getShapes();
+        if(selectedShapes.contains(clickedShape)){
+            selectedShapes.remove(clickedShape);
+        }
+        else{
+            selectedShapes.add(clickedShape);
+        }
+        
 
         jDrawingFrame.getDrawTool().play();
-        System.out.println("trouvé!!");
     }
 
     @Override

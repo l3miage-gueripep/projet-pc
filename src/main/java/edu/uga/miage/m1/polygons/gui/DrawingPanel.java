@@ -20,6 +20,7 @@ public class DrawingPanel extends JPanel{
     private ArrayList<SimpleShape> currentlySelectedShapes = new ArrayList<>();
 
     public enum Mode {
+        NONE, //clic = nothing
         DRAW, //clic = draw
         MOVE, //clic = move
         GROUP //clic = add to group

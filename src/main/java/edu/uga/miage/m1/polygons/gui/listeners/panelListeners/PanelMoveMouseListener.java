@@ -49,9 +49,7 @@ public class PanelMoveMouseListener implements MouseListener {
             movingShapes.add(shapeAtLocation);
         }
         if(movingShapes.isEmpty()) return;
-        System.out.println(movingShapes.get(0));
         //detect if the shape is in a group
-        System.out.println(currentlySelectedShapes);
         if(currentlySelectedShapes != null && currentlySelectedShapes.contains(movingShapes.get(0))){
             currentlySelectedShapes.forEach(shape -> {
                 if(shape != movingShapes.get(0))

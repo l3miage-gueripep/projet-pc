@@ -28,6 +28,9 @@ public abstract class SimpleShape implements Visitable {
     public abstract int getSize();
     public abstract void setSize(int size);
     public abstract void applySize(Graphics2D g2, int newSize);
+    public boolean getSelected(){
+        return this.selected;
+    }
     public void toggleSelected(){
         this.selected = !selected;
     }

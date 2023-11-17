@@ -1,8 +1,12 @@
 package edu.uga.miage.m1.polygons.gui.listeners;
 
 import java.awt.Cursor;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import edu.uga.miage.m1.polygons.gui.GroupButton;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.DrawingPanel.Mode;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
@@ -21,17 +25,36 @@ public class GroupButtonListener implements ActionListener {
         var panel = jDrawingFrame.getPanel();
         panel.setMode(Mode.GROUP);
         panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        System.out.println("Grouping shapes");
-        if(jDrawingFrame.getCurrentlySelectedGroupButton() != null && jDrawingFrame.getCurrentlySelectedGroupButton().equals(jDrawingFrame.getGroupButtons().get(0))){
+        GroupButton sourceButton = (GroupButton) e.getSource();
+
+        boolean isAButtonSelected = jDrawingFrame.getCurrentlySelectedGroupButton() != null;
+        boolean isAlreadySelected = isAButtonSelected && jDrawingFrame.getCurrentlySelectedGroupButton().equals(sourceButton);
+        if(isAlreadySelected){
+            unselectSelectedShapes();
             jDrawingFrame.setCurrentlySelectedGroupButton(null);
+            panel.setMode(Mode.NONE);
         }
         else{
-            jDrawingFrame.setCurrentlySelectedGroupButton(jDrawingFrame.getGroupButtons().get(0));
+            if(isAButtonSelected){
+                unselectSelectedShapes();
+            }
+            jDrawingFrame.setCurrentlySelectedGroupButton(sourceButton);
+            toggleShapes(sourceButton.getShapes());
+            panel.setMode(Mode.GROUP);
         }
-        for(SimpleShape shape : jDrawingFrame.getGroupButtons().get(0).getShapes()){
-            
+        jDrawingFrame.getDrawTool().play();
+    }
+
+    private void unselectSelectedShapes(){
+        var currentlySelectedGroupButton = jDrawingFrame.getCurrentlySelectedGroupButton();
+        if(currentlySelectedGroupButton == null) return;
+
+        toggleShapes(currentlySelectedGroupButton.getShapes());
+    }
+
+    private void toggleShapes(ArrayList<SimpleShape> shapes){
+        for(SimpleShape shape : shapes){
             shape.toggleSelected();
-            jDrawingFrame.getDrawTool().play();
         }
     }
 }

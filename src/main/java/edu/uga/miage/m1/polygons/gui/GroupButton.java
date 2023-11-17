@@ -1,7 +1,6 @@
 package edu.uga.miage.m1.polygons.gui;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JButton;
 
@@ -10,7 +9,7 @@ import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 public class GroupButton extends JButton{
     
     
-    private List<SimpleShape> shapes;
+    private ArrayList<SimpleShape> shapes;
 
     public GroupButton(String text) {
         super(text);
@@ -25,7 +24,7 @@ public class GroupButton extends JButton{
         shapes.remove(shape);
     }
 
-    public List<SimpleShape> getShapes() {
+    public ArrayList<SimpleShape> getShapes() {
         return shapes;
     }
 
