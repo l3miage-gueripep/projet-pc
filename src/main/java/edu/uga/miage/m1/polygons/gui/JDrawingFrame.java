@@ -32,6 +32,7 @@ import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 
 public class JDrawingFrame extends JFrame {
     private static final long serialVersionUID = 1L;
+    private final int FRAME_WIDTH = 700;
     private JToolBar toolbar;
     private JToolBar groupsToolbar;
     private Shapes shapeSelected;
@@ -46,8 +47,6 @@ public class JDrawingFrame extends JFrame {
     private transient XMLActionListener xmlActionListener = new XMLActionListener(this);
     private transient CursorButtonListener cursorActionListener = new CursorButtonListener(this);
     private transient PanelMouseListener panelMouseListener = new PanelMouseListener(this);
-    
-
     
     public JDrawingFrame(String frameName) {
         super(frameName);
@@ -73,7 +72,7 @@ public class JDrawingFrame extends JFrame {
         add(panel, BorderLayout.CENTER);
         add(label, BorderLayout.SOUTH);
         toolbar.validate();
-        setPreferredSize(new Dimension(700, 700));
+        setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_WIDTH));
     }
 
 
@@ -81,7 +80,7 @@ public class JDrawingFrame extends JFrame {
         JPanel panel = new DrawingPanel(this);
         panel.setBackground(Color.WHITE);
         panel.setLayout(null);
-        panel.setMinimumSize(new Dimension(700, 700));
+        panel.setMinimumSize(new Dimension(FRAME_WIDTH, FRAME_WIDTH));
         panelMouseListener = new PanelMouseListener(this);
         panel.addMouseListener(panelMouseListener);
         cursorActionListener.setPanelMouseListener(panelMouseListener);
