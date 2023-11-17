@@ -28,7 +28,7 @@ public class DrawShapeCommand implements ShapeCommand {
         }
         if (!drawn) {
             this.shape.draw(g2);
-            drawn = true;
+            // drawn = true;
         }
     }
 

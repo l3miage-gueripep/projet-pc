@@ -28,13 +28,9 @@ import java.awt.geom.Path2D;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 
 
-public class Triangle implements SimpleShape  {
-    private int x;
-    private int y;
-    private int size = 50;
+public class Triangle extends SimpleShape  {
 
     private GeneralPath triangle;
-
     private int[] xcoords;
     private int[] ycoords;
 
@@ -54,7 +50,7 @@ public class Triangle implements SimpleShape  {
         triangle.closePath();
         g2.fill(triangle);
         BasicStroke wideStroke = new BasicStroke(2.0f);
-        g2.setColor(Color.black);
+        g2.setColor(super.getBorderColor());
         g2.setStroke(wideStroke);
         g2.draw(triangle);
     }
@@ -62,16 +58,6 @@ public class Triangle implements SimpleShape  {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-    }
-
-    @Override
-    public int getX() {
-        return this.x;
-    }
-
-    @Override
-    public int getY() {
-        return this.y;
     }
 
     @Override

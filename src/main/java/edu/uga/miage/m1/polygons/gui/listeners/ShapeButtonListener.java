@@ -7,11 +7,11 @@ import java.util.Iterator;
 import javax.swing.JButton;
 import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
+import edu.uga.miage.m1.polygons.gui.DrawingPanel.Mode;
 
 public class ShapeButtonListener implements ActionListener {
 
     private JDrawingFrame jDrawingFrame;
-    private PanelMouseListener panelMouseListener;
 
     public ShapeButtonListener(JDrawingFrame jDrawingFrame) {
         super();
@@ -19,7 +19,7 @@ public class ShapeButtonListener implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent evt) {
-        panelMouseListener.setDragShapesMode(false);
+        jDrawingFrame.getPanel().setMode(Mode.DRAW);
         var panel = jDrawingFrame.getPanel();
         panel.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
         Iterator<Shapes> keys = jDrawingFrame.getShapeButtons().keySet().iterator();
@@ -34,9 +34,5 @@ public class ShapeButtonListener implements ActionListener {
             }
             btn.repaint();
         }
-    }
-
-    public void setPanelMouseListener(PanelMouseListener mouseListener) {
-        this.panelMouseListener = mouseListener;
     }
 }

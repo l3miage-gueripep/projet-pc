@@ -23,7 +23,9 @@ import javax.swing.SwingConstants;
 
 import edu.uga.miage.m1.polygons.gui.listeners.CursorButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.GroupButtonListener;
-import edu.uga.miage.m1.polygons.gui.listeners.PanelMouseListener;
+import edu.uga.miage.m1.polygons.gui.listeners.panelListeners.PanelGroupMouseListener;
+import edu.uga.miage.m1.polygons.gui.listeners.panelListeners.PanelMoveMouseListener;
+import edu.uga.miage.m1.polygons.gui.listeners.panelListeners.PanelDrawMouseListener;
 import edu.uga.miage.m1.polygons.gui.listeners.ShapeButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.UndoAction;
 import edu.uga.miage.m1.polygons.gui.listeners.exports.JsonActionListener;
@@ -38,19 +40,16 @@ public class JDrawingFrame extends JFrame {
     private JToolBar toolbar;
     private JToolBar groupsToolbar;
     private Shapes shapeSelected;
-    private JPanel panel;
+    private DrawingPanel panel;
     private JLabel label;
     private List<SimpleShape> drawnShapes = new ArrayList<>();
     private transient DrawTool drawTool;
     private EnumMap<Shapes, JButton> shapeButtons = new EnumMap<>(Shapes.class);
     private List<GroupButton> groupButtons = new ArrayList<>();
 
-    private transient ShapeButtonListener shapeButtonListener = new ShapeButtonListener(this);
     private transient GroupButtonListener groupButtonListener = new GroupButtonListener(this);
     private transient JsonActionListener jsonActionListener = new JsonActionListener(this);
     private transient XMLActionListener xmlActionListener = new XMLActionListener(this);
-    private transient CursorButtonListener cursorActionListener = new CursorButtonListener(this);
-    private transient PanelMouseListener panelMouseListener = new PanelMouseListener(this);
     
     public JDrawingFrame(String frameName) {
         super(frameName);
@@ -77,7 +76,6 @@ public class JDrawingFrame extends JFrame {
     private void createShapeGroupsButtons() {
         for(int i = 0; i < GROUPS_AMOUNT; i++) {
             GroupButton button = new GroupButton("Groupe " + (i+1));
-            
             button.addActionListener(groupButtonListener);
             groupsToolbar.add(button);
         }
@@ -97,16 +95,14 @@ public class JDrawingFrame extends JFrame {
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_WIDTH));
     }
 
-
-    private JPanel initializePanel() {
-        JPanel panel = new DrawingPanel(this);
+    private DrawingPanel initializePanel() {
+        DrawingPanel panel = new DrawingPanel(this);
         panel.setBackground(Color.WHITE);
         panel.setLayout(null);
         panel.setMinimumSize(new Dimension(FRAME_WIDTH, FRAME_WIDTH));
-        panelMouseListener = new PanelMouseListener(this);
-        panel.addMouseListener(panelMouseListener);
-        cursorActionListener.setPanelMouseListener(panelMouseListener);
-        shapeButtonListener.setPanelMouseListener(panelMouseListener);
+        panel.addMouseListener(new PanelDrawMouseListener(this));
+        panel.addMouseListener(new PanelMoveMouseListener(this));
+        panel.addMouseListener(new PanelGroupMouseListener(this));
         return panel;
     }
 
@@ -128,7 +124,7 @@ public class JDrawingFrame extends JFrame {
         button.setBorderPainted(false);
         shapeButtons.put(shape, button);
         button.setActionCommand(shape.toString());
-        button.addActionListener(shapeButtonListener);
+        button.addActionListener(new ShapeButtonListener(this));
         toolbar.add(button);
         toolbar.validate();
         repaint();
@@ -156,7 +152,7 @@ public class JDrawingFrame extends JFrame {
         Image scaledImage = originalIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(scaledImage);
         JButton cursorButton = new JButton(resizedIcon);
-        cursorButton.addActionListener(cursorActionListener);
+        cursorButton.addActionListener(new CursorButtonListener(this));
         toolbar.add(cursorButton);
         cursorButton.setPreferredSize(new Dimension(50, 50));
     }
@@ -172,13 +168,15 @@ public class JDrawingFrame extends JFrame {
     public Shapes getShapeSelected() {
         return shapeSelected;
     }
-    public JPanel getPanel() {
+    public DrawingPanel getPanel() {
         return panel;
     }
 
     public void setShapeSelected(Shapes selected) {
         this.shapeSelected = selected;
     }
+
+
 }
 
 

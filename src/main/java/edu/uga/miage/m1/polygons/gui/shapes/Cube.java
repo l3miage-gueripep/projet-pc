@@ -5,12 +5,7 @@ import java.awt.Graphics2D;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 import edu.uga.singleshape.CubePanel;
 
-public class Cube implements SimpleShape {
-
-    private int x;
-    private int y;
-    private int size = 50;
-
+public class Cube extends SimpleShape {
     CubePanel cube;
 
     public Cube(int x, int y) {
@@ -35,16 +30,6 @@ public class Cube implements SimpleShape {
     public void setCoordinates(int x, int y) {
         this.x = x - size/2;
         this.y = y - size/2;
-    }
-
-    @Override
-    public int getX() {
-        return this.x;
-    }
-
-    @Override
-    public int getY() {
-        return this.y;
     }
 
     @Override

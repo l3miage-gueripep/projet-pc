@@ -32,10 +32,8 @@ import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
  *
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
  */
-public class Square implements SimpleShape {
-    private int x;
-    private int y;
-    private int size = 50;
+public class Square extends SimpleShape {
+    private Color borderColor = Color.BLACK;
 
     private Rectangle2D rectangle;
 
@@ -56,7 +54,7 @@ public class Square implements SimpleShape {
         g2.setPaint(gradient);
         g2.fill(rectangle);
         BasicStroke wideStroke = new BasicStroke(2.0f);
-        g2.setColor(Color.black);
+        g2.setColor(super.getBorderColor());
         g2.setStroke(wideStroke);
         g2.draw(rectangle);
     }
@@ -64,16 +62,6 @@ public class Square implements SimpleShape {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-    }
-
-    @Override
-    public int getX() {
-        return this.x;
-    }
-
-    @Override
-    public int getY() {
-        return this.y;
     }
 
     @Override

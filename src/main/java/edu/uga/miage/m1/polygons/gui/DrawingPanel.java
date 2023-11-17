@@ -16,7 +16,15 @@ import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
  */
 public class DrawingPanel extends JPanel{
 
+    public enum Mode {
+        DRAW, //clic = draw
+        MOVE, //clic = move
+        GROUP //clic = add to group
+    }
+
     private JDrawingFrame jDrawingFrame;
+
+    private Mode mode = Mode.DRAW;
 
     public DrawingPanel(JDrawingFrame jDrawingFrame) {
         super();
@@ -43,5 +51,20 @@ public class DrawingPanel extends JPanel{
             // Draw the shape
             shape.draw(g2);
         }
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+    public SimpleShape getShapeAtLocation(int x, int y){
+        for(SimpleShape shape : jDrawingFrame.getDrawnShapes()){
+            if(shape.isInside(x, y)){
+                return shape;
+            }
+        }
+        return null;
     }
 }
