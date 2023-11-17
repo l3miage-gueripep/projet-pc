@@ -33,6 +33,7 @@ import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 public class JDrawingFrame extends JFrame {
     private static final long serialVersionUID = 1L;
     private JToolBar toolbar;
+    private JToolBar groupsToolbar;
     private Shapes shapeSelected;
     private JPanel panel;
     private JLabel label;
@@ -51,9 +52,7 @@ public class JDrawingFrame extends JFrame {
     public JDrawingFrame(String frameName) {
         super(frameName);
         initializeLayout();
-        addShapesButtons();
-        addCursorButton();
-        addExportButtons();
+        addTopToolbarButtons();
         addUndoAction();
         drawTool = new DrawTool();
         repaint();
@@ -65,15 +64,16 @@ public class JDrawingFrame extends JFrame {
 
     private void initializeLayout() {
         toolbar = new JToolBar("Toolbar");
+        groupsToolbar = new JToolBar("Groups", SwingConstants.VERTICAL);
         panel = initializePanel();
         label = new JLabel(" ", SwingConstants.LEFT);
         setLayout(new BorderLayout());
+        add(groupsToolbar, BorderLayout.WEST);
         add(toolbar, BorderLayout.NORTH);
         add(panel, BorderLayout.CENTER);
         add(label, BorderLayout.SOUTH);
         toolbar.validate();
         setPreferredSize(new Dimension(700, 700));
-
     }
 
 
@@ -89,7 +89,11 @@ public class JDrawingFrame extends JFrame {
         return panel;
     }
 
-
+    private void addTopToolbarButtons(){
+        addShapesButtons();
+        addCursorButton();
+        addExportButtons();
+    }
 
     private void addShapesButtons() {
         addShapeButton(Shapes.SQUARE, new ImageIcon(getClass().getResource("images/square.png")));
