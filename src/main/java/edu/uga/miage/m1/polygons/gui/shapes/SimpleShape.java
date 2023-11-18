@@ -1,4 +1,5 @@
 package edu.uga.miage.m1.polygons.gui.shapes;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitable;
 
@@ -8,25 +9,56 @@ import edu.uga.miage.m1.polygons.gui.persistence.Visitable;
  *
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
  */
-public interface SimpleShape extends Visitable {
+public abstract class SimpleShape implements Visitable {
+    protected int x;
+    protected int y;
+    protected int size = 50;
+    protected boolean selected = false;
+    private static int numberOfShapes = 0;
+    private int id;
 
-    /**
-     * Method to draw the shape of the extension.
-     * @param g2 The graphics object used for painting.
-     */
+    protected SimpleShape(int x, int y) {
+        this.id = numberOfShapes++;
+        this.x = x - size/2;
+        this.y = y - size/2;
+    }
+
     public abstract void draw(Graphics2D g2);
-
     public abstract void setCoordinates(int x, int y);
+    
+    public int getX(){
+        return this.x;
+    }
+    public int getY(){
+        return this.y;
+    }
 
-    public abstract int getX();
 
-    public abstract int getY();
+    public int getId() {
+        return id;
+    }
+    public int getSize(){
+        return this.size;
+    }
+    public void setSize(int size){
+        this.size = size;
+    }
 
     public abstract boolean isInside(int x, int y);
-
-    public abstract int getSize();
-
-    public abstract void setSize(int size);
-
     public abstract void applySize(Graphics2D g2, int newSize);
+    public boolean getSelected(){
+        return this.selected;
+    }
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+    public void toggleSelected(){
+        this.selected = !selected;
+    }
+
+    protected Color getBorderColor(){
+        return selected ? Color.RED : Color.BLACK;
+    }
+
+    
 }

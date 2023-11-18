@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+
+import edu.uga.miage.m1.polygons.gui.GroupButton;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.persistence.JSonVisitor;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitable;
@@ -29,23 +32,26 @@ public class JsonActionListener implements ActionListener {
     JsonArrayBuilder jsonArray = Json.createArrayBuilder();
     public void actionPerformed(ActionEvent evt) {
         for(Visitable shape : jDrawingFrame.getDrawnShapes()){
-            // ItÃÂ¨re sur tous les boutons
             shape.accept(jSonVisitor);
             jsonArray.add(jSonVisitor.getJsonObject());
         }
-        JsonObject jsonObject = Json.createObjectBuilder()
-            .add("shapes", jsonArray)
-            .build();
+        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder().add("shapes", jsonArray);
+        jsonArray = Json.createArrayBuilder();
+        for(GroupButton groupButton : jDrawingFrame.getGroupButtons()){
+            jsonArray.add(groupButton.getJsonObject());
+        }
+        jsonObjectBuilder.add("groups", jsonArray);
+        JsonObject jsonObject = jsonObjectBuilder.build();
+
+
+
         this.writeInFile("exports/export.json", jsonObject);
     }
 
 
     private void writeInFile(String filepath, JsonObject jsonObject){
         try  (FileWriter fileWriter = new FileWriter(filepath)) {
-        
-            // Write the JSON object to the file
             fileWriter.write(jsonObject.toString());
-        
             logger.log(Level.INFO, "JSON object has been written to {0}", filepath);
         } catch (IOException e) {
             logger.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);

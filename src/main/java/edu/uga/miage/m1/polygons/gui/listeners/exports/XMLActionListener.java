@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -19,9 +20,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import edu.uga.miage.m1.polygons.gui.GroupButton;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitable;
 import edu.uga.miage.m1.polygons.gui.persistence.XMLVisitor;
+import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 
 public class XMLActionListener implements ActionListener {
 
@@ -48,13 +51,30 @@ public class XMLActionListener implements ActionListener {
                 document.appendChild(rooElement);
                 Element shapesElement = document.createElement("shapes");
                 rooElement.appendChild(shapesElement);
-                for (Visitable shape : jDrawingFrame.getDrawnShapes()) {
-                    // ItÃ¨re sur tous les boutons
+                Element groupsElement = document.createElement("groups");
+                rooElement.appendChild(groupsElement);
+                
+
+                List<SimpleShape> drawnShapes = jDrawingFrame.getDrawnShapes();
+                for (SimpleShape shape : drawnShapes) {
                     shape.accept(xmlVisitor);
-                    //on importe la node dans le document
-                    Node copiedNode = document.importNode(xmlVisitor.getShapElement(), true);
+                    Node copiedNode = document.importNode(xmlVisitor.getShapeElement(), true);
+                    ((Element)copiedNode).setAttribute("id", Integer.toString(shape.getId()));
                     shapesElement.appendChild(copiedNode);
                 }
+
+                int groupId = 0;
+                for (GroupButton groupButton : jDrawingFrame.getGroupButtons()) {
+                    Element groupElement = document.createElement("group");
+                    groupElement.setAttribute("id", Integer.toString(groupId++));
+                    groupsElement.appendChild(groupElement);
+                    for (SimpleShape shape : groupButton.getShapes()) {
+                        Element shapeElement = document.createElement("shape");
+                        shapeElement.setAttribute("id", Integer.toString(shape.getId()));
+                        groupElement.appendChild(shapeElement);
+                    }
+                }
+
                 this.writeInFile("exports/export.xml", document);
             } catch (ParserConfigurationException e) {
                 LOGGER.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);
@@ -80,10 +100,7 @@ public class XMLActionListener implements ActionListener {
         }
         private void writeInFile(String filepath, StringWriter stringWriter){
             try (FileWriter fileWriter = new FileWriter(filepath)) {
-                
-                // Write the JSON object to the file
                 fileWriter.write(stringWriter.toString());
-            
                 LOGGER.log(Level.INFO, "XML object has been written to {0}", filepath);
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);

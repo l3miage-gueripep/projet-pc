@@ -32,23 +32,20 @@ import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
  *
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
  */
-public class Square implements SimpleShape {
-    private int x;
-    private int y;
-    private int size = 50;
+public class Square extends SimpleShape {
+    private Color borderColor = Color.BLACK;
 
     private Rectangle2D rectangle;
 
     public Square(int x, int y) {
-        this.x = x - 25;
-        this.y = y - 25;
+        super(x, y);
         this.rectangle = new Rectangle2D.Double(this.x, this.y, size, size);
     }
 
     /**
      * Implements the <tt>SimpleShape.draw()</tt> method for painting
      * the shape.
-     * @param g2 The graphics object used for painting.
+     * @param panelGraphics2d The graphics object used for painting.
      */
     public void draw(Graphics2D g2) {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -56,7 +53,7 @@ public class Square implements SimpleShape {
         g2.setPaint(gradient);
         g2.fill(rectangle);
         BasicStroke wideStroke = new BasicStroke(2.0f);
-        g2.setColor(Color.black);
+        g2.setColor(super.getBorderColor());
         g2.setStroke(wideStroke);
         g2.draw(rectangle);
     }
@@ -64,16 +61,6 @@ public class Square implements SimpleShape {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-    }
-
-    @Override
-    public int getX() {
-        return this.x;
-    }
-
-    @Override
-    public int getY() {
-        return this.y;
     }
 
     @Override
@@ -88,10 +75,6 @@ public class Square implements SimpleShape {
         this.rectangle.setRect(x, y, size, size);
     }
 
-    public int getSize() {
-        return this.size;
-    }
-
     public void applySize(Graphics2D g2, int size) {
         int halfDifference = 0;
         if(size > this.size){
@@ -100,10 +83,5 @@ public class Square implements SimpleShape {
         this.size = size;
         this.rectangle.setRect(x - halfDifference, y - halfDifference, size, size);
         draw(g2);
-    }
-
-    @Override
-    public void setSize(int size) {
-        this.size = size;
     }
 }

@@ -1,4 +1,4 @@
-package edu.uga.miage.m1.polygons.gui.listeners;
+package edu.uga.miage.m1.polygons.gui.listeners.panelListeners;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -7,35 +7,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
+import edu.uga.miage.m1.polygons.gui.DrawingPanel.Mode;
 import edu.uga.miage.m1.polygons.gui.commands.DrawShapeCommand;
-import edu.uga.miage.m1.polygons.gui.commands.MoveShapeCommand;
 import edu.uga.miage.m1.polygons.gui.shapes.Circle;
 import edu.uga.miage.m1.polygons.gui.shapes.Cube;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 import edu.uga.miage.m1.polygons.gui.shapes.Square;
 import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
 
-public class PanelMouseListener implements MouseListener {
+public class PanelDrawMouseListener implements MouseListener {
 
     private JDrawingFrame jDrawingFrame;
-    private boolean dragShapesMode;
-    private SimpleShape movingShape;
+    private static final Logger logger = Logger.getLogger(PanelDrawMouseListener.class.getName());
 
-    private final int onDragSizeChange = 10;
-
-    private static final Logger logger = Logger.getLogger(PanelMouseListener.class.getName());
-
-    public PanelMouseListener(JDrawingFrame jDrawingFrame) {
+    public PanelDrawMouseListener(JDrawingFrame jDrawingFrame) {
         super();
         this.jDrawingFrame = jDrawingFrame;
     }
 
     @Override
     public void mouseClicked(MouseEvent evt) {
+        if(jDrawingFrame.getPanel().getMode() != Mode.DRAW) return;
         var panel = jDrawingFrame.getPanel();
         var selected = jDrawingFrame.getShapeSelected();
         if (panel.contains(evt.getX(), evt.getY()) && selected != null) {
-            Graphics2D g2 = (Graphics2D) panel.getGraphics();
+            Graphics2D g2 = jDrawingFrame.getPanelG2();
             SimpleShape shape = null;
             switch(selected) {
                 case CIRCLE:
@@ -53,7 +49,7 @@ public class PanelMouseListener implements MouseListener {
                 default:
                     logger.log(Level.FINE, "No shape named {0}", selected);
             }
-            DrawShapeCommand drawShapeCommand = new DrawShapeCommand(shape, g2);
+            DrawShapeCommand drawShapeCommand = new DrawShapeCommand(shape);
 
             var drawTool = jDrawingFrame.getDrawTool();
             drawTool.addCommand(drawShapeCommand);
@@ -64,14 +60,12 @@ public class PanelMouseListener implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(!dragShapesMode) return;
-        startMovingShape(e);
+        // do nothing
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(!dragShapesMode) return;        
-        moveShape(e.getX(), e.getY());
+        // do nothing
     }
     
     @Override
@@ -82,39 +76,5 @@ public class PanelMouseListener implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         // do nothing
-    }
-
-    private void startMovingShape(MouseEvent e) {
-        movingShape = null;
-        for(SimpleShape shape : jDrawingFrame.getDrawnShapes()){
-            if(shape.isInside(e.getX(), e.getY())){
-                movingShape = shape;
-            }
-        }
-        if(movingShape == null) return;
-        changeShapeSize(movingShape, movingShape.getSize() + onDragSizeChange);
-    }
-
-    private void moveShape(int x, int y) {
-        if(movingShape == null) return;
-
-        var drawTool = jDrawingFrame.getDrawTool();
-        // needs to do this before actually changing the on screen shape size to move the shape on the right place
-        //changing shape size before repaint = visual glitches
-        movingShape.setSize(movingShape.getSize() - onDragSizeChange);
-        drawTool.addCommand(new MoveShapeCommand(movingShape, x, y));
-        drawTool.play();
-        jDrawingFrame.repaint();
-        changeShapeSize(movingShape, movingShape.getSize());
-        movingShape = null;   
-    }
-
-    private void changeShapeSize(SimpleShape shape, int newSize){
-        Graphics2D g2 = (Graphics2D) jDrawingFrame.getPanel().getGraphics();
-        shape.applySize(g2, newSize);
-    }
-
-    public void setDragShapesMode(boolean dragShapesMode) {
-        this.dragShapesMode = dragShapesMode;
     }
 }

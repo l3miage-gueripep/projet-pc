@@ -6,6 +6,7 @@ import javax.json.JsonObjectBuilder;
 
 import edu.uga.miage.m1.polygons.gui.shapes.Circle;
 import edu.uga.miage.m1.polygons.gui.shapes.Cube;
+import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 import edu.uga.miage.m1.polygons.gui.shapes.Square;
 import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
 
@@ -20,25 +21,31 @@ public class JSonVisitor implements Visitor {
         jsonObjectBuilder = Json.createObjectBuilder();
     }
 
+    private void visitShape(String type, SimpleShape shape) {
+        jsonObjectBuilder.add("id", shape.getId())
+            .add("type", type)
+            .add("x", shape.getX())
+            .add("y", shape.getY());
+    }
+
     @Override
     public void visit(Circle circle) {
-        jsonObjectBuilder.add("type", "circle")
-                .add("x", circle.getX())
-                .add("y", circle.getY());
+        visitShape("circle", circle);
     }
 
     @Override
     public void visit(Square square) {
-        jsonObjectBuilder.add("type", "square")
-                .add("x", square.getX())
-                .add("y", square.getY());
+        visitShape("square", square);
     }
 
     @Override
     public void visit(Triangle triangle) {
-        jsonObjectBuilder.add("type", "triangle")
-                .add("x", triangle.getX())
-                .add("y", triangle.getY());
+        visitShape("triangle", triangle);
+    }
+
+    @Override
+    public void visit(Cube cube) {
+        visitShape("cube", cube);
     }
 
     public String getRepresentation() {
@@ -50,10 +57,5 @@ public class JSonVisitor implements Visitor {
         return this.jsonObjectBuilder.build();
     }
 
-    @Override
-    public void visit(Cube cube) {
-        jsonObjectBuilder.add("type", "cube")
-                .add("x", cube.getX())
-                .add("y", cube.getY());
-    }
+
 }

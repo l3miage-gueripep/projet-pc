@@ -28,19 +28,11 @@ import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 
 
 
-public class Circle implements SimpleShape {
-
-    private int x;
-
-    private int y;
-
-    private int size = 50;
-
+public class Circle extends SimpleShape {
     private Ellipse2D circle;
 
     public Circle(int x, int y) {
-        this.x = x - size/2;
-        this.y = y - size/2;
+        super(x, y);
         this.circle = new Ellipse2D.Double(this.x, this.y, size, size);
     }
 
@@ -51,7 +43,7 @@ public class Circle implements SimpleShape {
         g2.setPaint(gradient);
         g2.fill(circle);
         BasicStroke wideStroke = new BasicStroke(2.0f);
-        g2.setColor(Color.black);
+        g2.setColor(super.getBorderColor());
         g2.setStroke(wideStroke);
         g2.draw(circle);
     }
@@ -59,14 +51,6 @@ public class Circle implements SimpleShape {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-    }
-
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
     }
 
     @Override
@@ -82,11 +66,6 @@ public class Circle implements SimpleShape {
     }
 
     @Override
-    public int getSize() {
-        return this.size;
-    }
-
-    @Override
     public void applySize(Graphics2D g2, int size) {
         int halfDifference = 0;
         if(size > this.size){
@@ -98,9 +77,10 @@ public class Circle implements SimpleShape {
     }
 
     @Override
-    public void setSize(int size) {
-        this.size = size;
+    public void toggleSelected() {
+        selected = !selected;   
     }
+
 
     
 }

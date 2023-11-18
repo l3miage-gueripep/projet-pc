@@ -28,18 +28,15 @@ import java.awt.geom.Path2D;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 
 
-public class Triangle implements SimpleShape  {
-    private int x;
-    private int y;
-    private int size = 50;
+public class Triangle extends SimpleShape  {
 
     private GeneralPath triangle;
-
     private int[] xcoords;
     private int[] ycoords;
 
     public Triangle(int x, int y) {
-        setCoordinates(x - size / 2, y - size / 2);
+        super(x, y);
+        setCoordinates(this.x, this.y);
     }
 
     public void draw(Graphics2D g2) {
@@ -54,7 +51,7 @@ public class Triangle implements SimpleShape  {
         triangle.closePath();
         g2.fill(triangle);
         BasicStroke wideStroke = new BasicStroke(2.0f);
-        g2.setColor(Color.black);
+        g2.setColor(super.getBorderColor());
         g2.setStroke(wideStroke);
         g2.draw(triangle);
     }
@@ -62,16 +59,6 @@ public class Triangle implements SimpleShape  {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
-    }
-
-    @Override
-    public int getX() {
-        return this.x;
-    }
-
-    @Override
-    public int getY() {
-        return this.y;
     }
 
     @Override
@@ -88,10 +75,6 @@ public class Triangle implements SimpleShape  {
         ycoords = new int[]{y, y + size, y + size};
     }
 
-    public int getSize() {
-        return this.size;
-    }
-
     public void applySize(Graphics2D g2, int size) {
         int halfDifference = 0;
         if(size > this.size){
@@ -100,10 +83,5 @@ public class Triangle implements SimpleShape  {
         this.size = size;
         this.setCoordinates(x-halfDifference, y-halfDifference);
         draw(g2);
-    }
-
-    @Override
-    public void setSize(int size) {
-        this.size = size;
     }
 }

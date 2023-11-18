@@ -32,7 +32,7 @@ public class XMLVisitor implements Visitor {
     private static final Logger logger = Logger.getLogger(XMLVisitor.class.getName());
     private static final String GENERIC_ERROR_MESSAGE = "An error occurred";
 
-    public Element getShapElement() {
+    public Element getShapeElement() {
         return shapeElement;
     }
 
