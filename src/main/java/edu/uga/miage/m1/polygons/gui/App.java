@@ -8,6 +8,6 @@ package edu.uga.miage.m1.polygons.gui;
 public class App {
 
     public static void main(String[] args) {
-        GUIHelper.showOnFrame("test");
+        GUIHelper.showOnFrame("PhotoMiage");
     }
 }

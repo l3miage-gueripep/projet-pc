@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import edu.uga.miage.m1.polygons.gui.DrawingPanel.Mode;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
-import edu.uga.miage.m1.polygons.gui.commands.MoveShapeCommand;
+import edu.uga.miage.m1.polygons.gui.commands.MoveShapesCommand;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 
 public class PanelMoveMouseListener implements MouseListener {
@@ -74,10 +74,10 @@ public class PanelMoveMouseListener implements MouseListener {
         // changing shape size before repaint = visual glitches
         for(SimpleShape shape : movingShapes){
             shape.setSize(shape.getSize() - onDragSizeChange);
-            var newX = shape.getX() + (x - initialX);
-            var newY = shape.getY() + (y - initialY);
-            drawTool.addCommand(new MoveShapeCommand(shape, newX, newY));
         }
+        ArrayList<SimpleShape> movingShapesCopy = new ArrayList<>(movingShapes);
+        drawTool.addCommand(new MoveShapesCommand(movingShapesCopy, (x - initialX), (y - initialY)));
+        
         drawTool.play();
         jDrawingFrame.repaint();
         

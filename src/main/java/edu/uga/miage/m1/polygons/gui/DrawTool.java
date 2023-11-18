@@ -3,14 +3,12 @@ package edu.uga.miage.m1.polygons.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.uga.miage.m1.polygons.gui.commands.DrawShapeCommand;
-import edu.uga.miage.m1.polygons.gui.commands.MoveShapeCommand;
-import edu.uga.miage.m1.polygons.gui.commands.ShapeCommand;
+import edu.uga.miage.m1.polygons.gui.commands.Command;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 
 public class DrawTool {
 
-    protected List<ShapeCommand> commands;
+    protected List<Command> commands;
     private JDrawingFrame jDrawingFrame;
 
     public DrawTool(JDrawingFrame jDrawingFrame) {
@@ -18,7 +16,7 @@ public class DrawTool {
         this.jDrawingFrame = jDrawingFrame;
     }
 
-    public ShapeCommand getLastCommand(){
+    public Command getLastCommand(){
         if(!this.commands.isEmpty()){
             return this.commands.get(this.commands.size()-1);
         }
@@ -27,59 +25,30 @@ public class DrawTool {
 
     public void removeLastCommand(){
         if(!this.commands.isEmpty()){
-            var lastCommand = this.commands.get(this.commands.size()-1);
             this.commands.remove(this.commands.size()-1);
-            if (lastCommand instanceof MoveShapeCommand) {
-                SimpleShape movedShape = lastCommand.getShape();
-                if (!hasAMoveCommand(movedShape)) {
-                    setShapeMoved(movedShape, false);
-                }
-            }
         }
     }
 
-    public boolean hasAMoveCommand(SimpleShape movedShape) {
-        for (ShapeCommand command : commands) {
-            if (command instanceof MoveShapeCommand) {
-                SimpleShape otherShape = command.getShape();
-                if (movedShape.equals(otherShape)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    //change the move attribute of the DrawShapeCommand that draws the movedShape to the right value
-    public void setShapeMoved(SimpleShape movedShape, boolean moved) {
-        for (ShapeCommand command : commands) {
-            if (command instanceof DrawShapeCommand) {
-                SimpleShape drawnShape = command.getShape();
-                if (movedShape.equals(drawnShape)) {
-                    movedShape.setIsMoved(moved);
-                    // ((DrawShapeCommand)command).setMoved(moved);
-                    break;
-                }
-            }
-        }
-    }
-
-    public void addCommand(ShapeCommand command) {
+    public void addCommand(Command command) {
         commands.add(command);
-        if(command instanceof MoveShapeCommand){
-            setShapeMoved(command.getShape(), true);
-        }
     }
 
     public void play() {
+        resetSelection();
+        for (Command command : commands) {
+            command.execute();
+        }
+        drawAllShapes();
+    }
+
+    private void resetSelection() {
         jDrawingFrame.resetGroupButtons();
         for(SimpleShape shape : jDrawingFrame.getDrawnShapes()){
             shape.setSelected(false);
         }
-        for (ShapeCommand command : commands) {
-            command.execute();
-        }
+    }
 
+    private void drawAllShapes(){
         for(SimpleShape shape : jDrawingFrame.getDrawnShapes()){
             shape.draw(jDrawingFrame.getPanelG2());
         }
@@ -89,7 +58,7 @@ public class DrawTool {
         commands.clear();
     }
     
-    public List<ShapeCommand> getCommands() {
+    public List<Command> getCommands() {
         return commands;
     }
 }
