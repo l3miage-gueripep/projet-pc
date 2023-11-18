@@ -26,30 +26,18 @@ public class Cube extends SimpleShape {
 
     @Override
     public void setCoordinates(int x, int y) {
-        this.x = x - size/2;
-        this.y = y - size/2;
+        this.x = x;
+        this.y = y;
     }
 
     @Override
     public boolean isInside(int x, int y) {
-            return x >= this.x - 30 && x <= (this.x + size +30) && y >= this.y - 30 && y <= (this.y + size + 30);
-}
-
-
-    @Override
-    public int getSize() {
-        return this.size;
-    }
-
-    @Override
-    public void setSize(int size) {
-        this.size = size;
+        return x >= this.x - 30 && x <= (this.x + size +30) && y >= this.y - 30 && y <= (this.y + size + 30);
     }
 
     @Override
     public void applySize(Graphics2D g2, int newSize) {
-        //indisponible pour les cubes
-        return;
+        //not implemented
     }
     
 }

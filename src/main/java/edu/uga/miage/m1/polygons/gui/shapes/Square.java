@@ -75,10 +75,6 @@ public class Square extends SimpleShape {
         this.rectangle.setRect(x, y, size, size);
     }
 
-    public int getSize() {
-        return this.size;
-    }
-
     public void applySize(Graphics2D g2, int size) {
         int halfDifference = 0;
         if(size > this.size){
@@ -87,10 +83,5 @@ public class Square extends SimpleShape {
         this.size = size;
         this.rectangle.setRect(x - halfDifference, y - halfDifference, size, size);
         draw(g2);
-    }
-
-    @Override
-    public void setSize(int size) {
-        this.size = size;
     }
 }

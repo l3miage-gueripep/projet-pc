@@ -66,11 +66,6 @@ public class Circle extends SimpleShape {
     }
 
     @Override
-    public int getSize() {
-        return this.size;
-    }
-
-    @Override
     public void applySize(Graphics2D g2, int size) {
         int halfDifference = 0;
         if(size > this.size){
@@ -79,11 +74,6 @@ public class Circle extends SimpleShape {
         this.size = size;
         this.circle.setFrame(x - halfDifference, y - halfDifference, size, size);
         draw(g2);
-    }
-
-    @Override
-    public void setSize(int size) {
-        this.size = size;
     }
 
     @Override

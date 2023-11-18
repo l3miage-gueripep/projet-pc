@@ -32,12 +32,19 @@ public abstract class SimpleShape implements Visitable {
     public int getY(){
         return this.y;
     }
+
+
     public int getId() {
         return id;
     }
+    public int getSize(){
+        return this.size;
+    }
+    public void setSize(int size){
+        this.size = size;
+    }
+
     public abstract boolean isInside(int x, int y);
-    public abstract int getSize();
-    public abstract void setSize(int size);
     public abstract void applySize(Graphics2D g2, int newSize);
     public boolean getSelected(){
         return this.selected;

@@ -11,8 +11,8 @@ public class GUIHelper {
 
     private GUIHelper(){}
 
-    public static void showOnFrame(String frameName) {
-        JFrame frame = new JDrawingFrame(frameName);
+    public static void showOnFrame() {
+        JFrame frame = JDrawingFrame.getInstance();
         WindowAdapter wa = new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

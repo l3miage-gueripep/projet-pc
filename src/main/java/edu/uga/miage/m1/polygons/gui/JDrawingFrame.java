@@ -36,6 +36,7 @@ import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 
 public class JDrawingFrame extends JFrame {
+    private static JDrawingFrame instance;
     private static final long serialVersionUID = 1L;
     private final int FRAME_WIDTH = 700;
     private final int GROUPS_AMOUNT = 5;
@@ -57,17 +58,21 @@ public class JDrawingFrame extends JFrame {
     private transient JsonActionListener jsonActionListener = new JsonActionListener(this);
     private transient XMLActionListener xmlActionListener = new XMLActionListener(this);
     
-    public JDrawingFrame(String frameName) {
+    private JDrawingFrame(String frameName) {
         super(frameName);
         initializeLayout();
         addTopToolbarButtons();
-        
-        //shape groups
         initializeShapeGroups();
-
         addUndoAction();
         drawTool = new DrawTool(this);
         repaint();
+    }
+
+    public static JDrawingFrame getInstance() {
+        if (instance == null) {
+            instance = new JDrawingFrame("PhotoMiage");
+        }
+        return instance;
     }
 
     public DrawTool getDrawTool() {
@@ -153,21 +158,15 @@ public class JDrawingFrame extends JFrame {
     private void addExportButtons() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
-
         JButton jsonButton = new JButton("Convertir en JSON");
         JButton xmlButton = new JButton("Convertir en XML  ");
-        
         Dimension maxDimension = new Dimension(200, jsonButton.getPreferredSize().height);
         jsonButton.setMaximumSize(maxDimension);
         xmlButton.setMaximumSize(maxDimension);
-        
         jsonButton.addActionListener(jsonActionListener);
         xmlButton.addActionListener(xmlActionListener);
-        
         buttonPanel.add(jsonButton);
         buttonPanel.add(xmlButton);
-
-        // Assuming you have a toolbar or a container where you want to add the buttons
         toolbar.add(buttonPanel, BorderLayout.EAST);
     }
 

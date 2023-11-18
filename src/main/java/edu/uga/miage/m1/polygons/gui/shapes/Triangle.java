@@ -75,10 +75,6 @@ public class Triangle extends SimpleShape  {
         ycoords = new int[]{y, y + size, y + size};
     }
 
-    public int getSize() {
-        return this.size;
-    }
-
     public void applySize(Graphics2D g2, int size) {
         int halfDifference = 0;
         if(size > this.size){
@@ -87,10 +83,5 @@ public class Triangle extends SimpleShape  {
         this.size = size;
         this.setCoordinates(x-halfDifference, y-halfDifference);
         draw(g2);
-    }
-
-    @Override
-    public void setSize(int size) {
-        this.size = size;
     }
 }
