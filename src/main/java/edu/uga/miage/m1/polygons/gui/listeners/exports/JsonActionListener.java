@@ -9,6 +9,9 @@ import java.util.logging.Logger;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+
+import edu.uga.miage.m1.polygons.gui.GroupButton;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.persistence.JSonVisitor;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitable;
@@ -32,9 +35,16 @@ public class JsonActionListener implements ActionListener {
             shape.accept(jSonVisitor);
             jsonArray.add(jSonVisitor.getJsonObject());
         }
-        JsonObject jsonObject = Json.createObjectBuilder()
-            .add("shapes", jsonArray)
-            .build();
+        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder().add("shapes", jsonArray);
+        jsonArray = Json.createArrayBuilder();
+        for(GroupButton groupButton : jDrawingFrame.getGroupButtons()){
+            jsonArray.add(groupButton.getJsonObject());
+        }
+        jsonObjectBuilder.add("groups", jsonArray);
+        JsonObject jsonObject = jsonObjectBuilder.build();
+
+
+
         this.writeInFile("exports/export.json", jsonObject);
     }
 

@@ -14,8 +14,11 @@ public abstract class SimpleShape implements Visitable {
     protected int y;
     protected int size = 50;
     protected boolean selected = false;
+    private static int numberOfShapes = 0;
+    private int id;
 
     protected SimpleShape(int x, int y) {
+        this.id = numberOfShapes++;
         this.x = x - size/2;
         this.y = y - size/2;
     }
@@ -28,6 +31,9 @@ public abstract class SimpleShape implements Visitable {
     }
     public int getY(){
         return this.y;
+    }
+    public int getId() {
+        return id;
     }
     public abstract boolean isInside(int x, int y);
     public abstract int getSize();
