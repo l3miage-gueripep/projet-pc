@@ -12,6 +12,7 @@ import java.util.EnumMap;
 import java.util.List;
 
 import javax.swing.Action;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -38,6 +39,7 @@ public class JDrawingFrame extends JFrame {
     private static final long serialVersionUID = 1L;
     private final int FRAME_WIDTH = 700;
     private final int GROUPS_AMOUNT = 5;
+    private final int BUTTONS_SIZE = 50;
     private JToolBar toolbar;
     private JToolBar groupsToolbar;
     private Shapes shapeSelected;
@@ -48,6 +50,8 @@ public class JDrawingFrame extends JFrame {
     private EnumMap<Shapes, JButton> shapeButtons = new EnumMap<>(Shapes.class);
     private List<GroupButton> groupButtons = new ArrayList<>();
     private GroupButton currentlySelectedGroupButton;
+    private JButton cursorButton;
+
 
     private transient GroupButtonListener groupButtonListener = new GroupButtonListener(this);
     private transient JsonActionListener jsonActionListener = new JsonActionListener(this);
@@ -123,7 +127,7 @@ public class JDrawingFrame extends JFrame {
     }
 
     private void addShapeButton(Shapes shape, ImageIcon icon) {
-        JButton button = new JButton(icon);
+        JButton button = new JButton(getScaledImageIcon(icon));
         button.setBorderPainted(false);
         shapeButtons.put(shape, button);
         button.setActionCommand(shape.toString());
@@ -133,13 +137,38 @@ public class JDrawingFrame extends JFrame {
         repaint();
     }
 
+    private void addCursorButton(){
+        ImageIcon originalIcon = new ImageIcon(getClass().getResource("images/cursor.png"));
+        cursorButton = new JButton(getScaledImageIcon(originalIcon));
+        cursorButton.setBorderPainted(false);
+        cursorButton.addActionListener(new CursorButtonListener(this));
+        toolbar.add(cursorButton);
+    }
+
+    private ImageIcon getScaledImageIcon(ImageIcon icon){
+        Image scaledImage = icon.getImage().getScaledInstance(BUTTONS_SIZE, BUTTONS_SIZE, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
+    }
+
     private void addExportButtons() {
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
+
         JButton jsonButton = new JButton("Convertir en JSON");
-        JButton xmlButton = new JButton("Convertir en XML");
+        JButton xmlButton = new JButton("Convertir en XML  ");
+        
+        Dimension maxDimension = new Dimension(200, jsonButton.getPreferredSize().height);
+        jsonButton.setMaximumSize(maxDimension);
+        xmlButton.setMaximumSize(maxDimension);
+        
         jsonButton.addActionListener(jsonActionListener);
-        toolbar.add(jsonButton);
         xmlButton.addActionListener(xmlActionListener);
-        toolbar.add(xmlButton);
+        
+        buttonPanel.add(jsonButton);
+        buttonPanel.add(xmlButton);
+
+        // Assuming you have a toolbar or a container where you want to add the buttons
+        toolbar.add(buttonPanel, BorderLayout.EAST);
     }
 
     private void addUndoAction()  {
@@ -147,17 +176,6 @@ public class JDrawingFrame extends JFrame {
         KeyStroke ctrlZKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx());
         panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ctrlZKeyStroke, "undo");
         panel.getActionMap().put("undo", undoAction);
-    }
-
-
-    private void addCursorButton(){
-        ImageIcon originalIcon = new ImageIcon(getClass().getResource("images/cursor.png"));
-        Image scaledImage = originalIcon.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
-        ImageIcon resizedIcon = new ImageIcon(scaledImage);
-        JButton cursorButton = new JButton(resizedIcon);
-        cursorButton.addActionListener(new CursorButtonListener(this));
-        toolbar.add(cursorButton);
-        cursorButton.setPreferredSize(new Dimension(50, 50));
     }
 
     public GroupButton getCurrentlySelectedGroupButton(){
@@ -178,6 +196,20 @@ public class JDrawingFrame extends JFrame {
         }
     }
 
+    public void deselectAllButtons(){
+        deselectShapeButton();
+        deselectCursorButton();
+    }
+
+    private void deselectShapeButton(){
+        for(JButton button : shapeButtons.values()){
+            button.setBorderPainted(false);
+        }
+    }
+
+    private void deselectCursorButton(){
+        cursorButton.setBorderPainted(false);
+    }
 
 
     public List<SimpleShape> getDrawnShapes() {
@@ -197,6 +229,9 @@ public class JDrawingFrame extends JFrame {
     }
     public void setShapeSelected(Shapes selected) {
         this.shapeSelected = selected;
+    }
+    public JButton getCursorButton() {
+        return cursorButton;
     }
     public Graphics2D getPanelG2(){
         return (Graphics2D) panel.getGraphics();

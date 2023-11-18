@@ -29,7 +29,6 @@ public class JsonActionListener implements ActionListener {
     JsonArrayBuilder jsonArray = Json.createArrayBuilder();
     public void actionPerformed(ActionEvent evt) {
         for(Visitable shape : jDrawingFrame.getDrawnShapes()){
-            // ItÃÂ¨re sur tous les boutons
             shape.accept(jSonVisitor);
             jsonArray.add(jSonVisitor.getJsonObject());
         }
@@ -42,10 +41,7 @@ public class JsonActionListener implements ActionListener {
 
     private void writeInFile(String filepath, JsonObject jsonObject){
         try  (FileWriter fileWriter = new FileWriter(filepath)) {
-        
-            // Write the JSON object to the file
             fileWriter.write(jsonObject.toString());
-        
             logger.log(Level.INFO, "JSON object has been written to {0}", filepath);
         } catch (IOException e) {
             logger.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);

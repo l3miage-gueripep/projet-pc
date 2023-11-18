@@ -14,18 +14,10 @@ public abstract class SimpleShape implements Visitable {
     protected int y;
     protected int size = 50;
     protected boolean selected = false;
-    protected boolean isMoved = false;
 
     protected SimpleShape(int x, int y) {
         this.x = x - size/2;
         this.y = y - size/2;
-    }
-
-    public boolean getIsMoved(){
-        return this.isMoved;
-    }
-    public void setIsMoved(boolean moved){
-        this.isMoved = moved;
     }
 
     public abstract void draw(Graphics2D g2);

@@ -22,9 +22,8 @@ public class GroupButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         var panel = jDrawingFrame.getPanel();
-
         GroupButton sourceButton = (GroupButton) e.getSource();
-        
+        jDrawingFrame.deselectAllButtons();
         boolean isAButtonSelected = jDrawingFrame.getCurrentlySelectedGroupButton() != null;
         boolean isAlreadySelected = isAButtonSelected && jDrawingFrame.getCurrentlySelectedGroupButton().equals(sourceButton);
         if(isAlreadySelected){

@@ -49,10 +49,8 @@ public class XMLActionListener implements ActionListener {
                 Element shapesElement = document.createElement("shapes");
                 rooElement.appendChild(shapesElement);
                 for (Visitable shape : jDrawingFrame.getDrawnShapes()) {
-                    // ItÃ¨re sur tous les boutons
                     shape.accept(xmlVisitor);
-                    //on importe la node dans le document
-                    Node copiedNode = document.importNode(xmlVisitor.getShapElement(), true);
+                    Node copiedNode = document.importNode(xmlVisitor.getShapeElement(), true);
                     shapesElement.appendChild(copiedNode);
                 }
                 this.writeInFile("exports/export.xml", document);
@@ -80,10 +78,7 @@ public class XMLActionListener implements ActionListener {
         }
         private void writeInFile(String filepath, StringWriter stringWriter){
             try (FileWriter fileWriter = new FileWriter(filepath)) {
-                
-                // Write the JSON object to the file
                 fileWriter.write(stringWriter.toString());
-            
                 LOGGER.log(Level.INFO, "XML object has been written to {0}", filepath);
             } catch (IOException e) {
                 LOGGER.log(Level.SEVERE, GENERIC_ERROR_MESSAGE, e);

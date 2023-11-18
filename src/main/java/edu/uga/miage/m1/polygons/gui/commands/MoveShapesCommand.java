@@ -1,5 +1,4 @@
 package edu.uga.miage.m1.polygons.gui.commands;
-import java.awt.List;
 import java.util.ArrayList;
 
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;

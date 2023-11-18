@@ -4,16 +4,14 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.DrawingPanel.Mode;
 
 public class CursorButtonListener implements ActionListener {
     private JDrawingFrame jDrawingFrame;
-
-    public void setPanelMouseListener() {
-
-    }
-
 
     public CursorButtonListener(JDrawingFrame jDrawingFrame) {
         super();
@@ -25,6 +23,8 @@ public class CursorButtonListener implements ActionListener {
         panel.setMode(Mode.MOVE);
         panel.setCursor(new Cursor(Cursor.MOVE_CURSOR));
         setPanelGroupButtonBackground();
+        jDrawingFrame.deselectAllButtons();
+        jDrawingFrame.getCursorButton().setBorderPainted(true);
         jDrawingFrame.setShapeSelected(null);
     }
 

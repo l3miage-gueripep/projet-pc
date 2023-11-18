@@ -20,10 +20,10 @@ public class DrawingPanel extends JPanel{
     private ArrayList<SimpleShape> currentlySelectedShapes = new ArrayList<>();
 
     public enum Mode {
-        NONE, //clic = nothing
-        DRAW, //clic = draw
-        MOVE, //clic = move
-        GROUP //clic = add to group
+        NONE,
+        DRAW,
+        MOVE,
+        GROUP
     }
 
     private JDrawingFrame jDrawingFrame;
@@ -38,9 +38,7 @@ public class DrawingPanel extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
-        // g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
+        Graphics2D g2 = (Graphics2D) g;        
         for (SimpleShape shape : jDrawingFrame.getDrawnShapes()) {
             shape.draw(g2);
         }
