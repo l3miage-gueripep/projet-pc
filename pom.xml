@@ -34,7 +34,6 @@
 			<groupId>edu.uga.miage.m1</groupId>
 			<artifactId>edu.uga.singleshape</artifactId>
 			<version>1.0.1</version>
-			
 		</dependency>
 	</dependencies>
   	<build>

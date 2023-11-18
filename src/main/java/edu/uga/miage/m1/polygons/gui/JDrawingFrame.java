@@ -61,7 +61,6 @@ public class JDrawingFrame extends JFrame {
         //shape groups
         initializeShapeGroups();
 
-
         addUndoAction();
         drawTool = new DrawTool();
         repaint();
