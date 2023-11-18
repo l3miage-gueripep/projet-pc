@@ -165,6 +165,10 @@ public class JDrawingFrame extends JFrame {
     }
 
     public void setCurrentlySelectedGroupButton(GroupButton currentlySelectedGroupButton) {
+        if(this.currentlySelectedGroupButton != null)
+            this.currentlySelectedGroupButton.setBackground(Color.WHITE);
+        if(currentlySelectedGroupButton != null)
+            currentlySelectedGroupButton.setBackground(Color.CYAN);
         this.currentlySelectedGroupButton = currentlySelectedGroupButton;
     }
 

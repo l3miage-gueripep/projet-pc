@@ -1,5 +1,6 @@
 package edu.uga.miage.m1.polygons.gui.listeners;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,32 +22,40 @@ public class GroupButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         var panel = jDrawingFrame.getPanel();
-        panel.setMode(Mode.GROUP);
-        panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-        GroupButton sourceButton = (GroupButton) e.getSource();
 
+        GroupButton sourceButton = (GroupButton) e.getSource();
+        
         boolean isAButtonSelected = jDrawingFrame.getCurrentlySelectedGroupButton() != null;
         boolean isAlreadySelected = isAButtonSelected && jDrawingFrame.getCurrentlySelectedGroupButton().equals(sourceButton);
         if(isAlreadySelected){
-            unselectSelectedShapes();
-            jDrawingFrame.setCurrentlySelectedGroupButton(null);
-            panel.setMode(Mode.NONE);
+            var mode = panel.getMode();
+            if(mode == Mode.MOVE){
+                panel.setMode(Mode.GROUP);
+                sourceButton.setBackground(Color.CYAN);
+            }
+            else{
+                unselectSelectedShapes();
+                jDrawingFrame.setCurrentlySelectedGroupButton(null);
+                panel.setMode(Mode.NONE);
+            }
         }
         else{
             if(isAButtonSelected){
                 unselectSelectedShapes();
+                jDrawingFrame.getCurrentlySelectedGroupButton().setBackground(Color.WHITE);
             }
             jDrawingFrame.setCurrentlySelectedGroupButton(sourceButton);
             toggleShapes(sourceButton.getShapes());
             panel.setMode(Mode.GROUP);
         }
+        panel.setMode(Mode.GROUP);
+        panel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         jDrawingFrame.getDrawTool().play();
     }
 
     private void unselectSelectedShapes(){
         var currentlySelectedGroupButton = jDrawingFrame.getCurrentlySelectedGroupButton();
         if(currentlySelectedGroupButton == null) return;
-
         toggleShapes(currentlySelectedGroupButton.getShapes());
     }
 

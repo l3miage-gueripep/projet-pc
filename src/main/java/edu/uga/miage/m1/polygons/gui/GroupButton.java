@@ -1,5 +1,6 @@
 package edu.uga.miage.m1.polygons.gui;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ public class GroupButton extends JButton{
     public GroupButton(String text) {
         super(text);
         shapes = new ArrayList<SimpleShape>();
+        setBackground(Color.WHITE);
     }
 
     public void addShape(SimpleShape shape) {
