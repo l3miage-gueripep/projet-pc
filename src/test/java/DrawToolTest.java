@@ -20,7 +20,7 @@ class DrawToolTest {
     @BeforeEach
     public void setUp() {
         // Create a new DrawTool instance for each test
-        drawTool = new DrawTool();
+        // drawTool = new DrawTool();
     }
 
     @Test

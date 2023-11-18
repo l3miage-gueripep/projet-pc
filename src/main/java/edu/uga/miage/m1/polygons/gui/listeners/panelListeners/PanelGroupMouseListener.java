@@ -4,9 +4,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import edu.uga.miage.m1.polygons.gui.GroupButton;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.DrawingPanel.Mode;
+import edu.uga.miage.m1.polygons.gui.commands.SelectShapesCommand;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 
 public class PanelGroupMouseListener implements MouseListener {
@@ -22,41 +22,35 @@ public class PanelGroupMouseListener implements MouseListener {
         if(jDrawingFrame.getPanel().getMode() != Mode.GROUP) return;
         SimpleShape clickedShape = jDrawingFrame.getPanel().getShapeAtLocation(e.getX(), e.getY());
         if(clickedShape == null) return;
-        clickedShape.toggleSelected();
+
+        var drawTool = jDrawingFrame.getDrawTool();
+        //create a list of the single shape clicked
+        ArrayList<SimpleShape> shapes = new ArrayList<>();
+        shapes.add(clickedShape);
 
         ArrayList<SimpleShape> selectedShapes = jDrawingFrame.getCurrentlySelectedGroupButton().getShapes();
-        if(selectedShapes.contains(clickedShape)){
-            selectedShapes.remove(clickedShape);
-        }
-        else{
-            selectedShapes.add(clickedShape);
-        }
-        
-
-        jDrawingFrame.getDrawTool().play();
+        drawTool.addCommand(new SelectShapesCommand(shapes, e.getX(), e.getY(), selectedShapes, jDrawingFrame));
+        jDrawingFrame.resetGroupButtons();
+        drawTool.play();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+        // do nothing
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+        // do nothing
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+        // do nothing
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        // throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+        // do nothing
     }
 }

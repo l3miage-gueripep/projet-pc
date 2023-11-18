@@ -20,6 +20,7 @@ public class ShapeButtonListener implements ActionListener {
 
     public void actionPerformed(ActionEvent evt) {
         jDrawingFrame.getPanel().setMode(Mode.DRAW);
+        jDrawingFrame.setCurrentlySelectedGroupButton(null);
         var panel = jDrawingFrame.getPanel();
         panel.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
         Iterator<Shapes> keys = jDrawingFrame.getShapeButtons().keySet().iterator();

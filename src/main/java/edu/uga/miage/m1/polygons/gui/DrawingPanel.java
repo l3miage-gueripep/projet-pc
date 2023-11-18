@@ -39,20 +39,9 @@ public class DrawingPanel extends JPanel{
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        
-        // Set rendering settings for all shapes
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        // g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         for (SimpleShape shape : jDrawingFrame.getDrawnShapes()) {
-            // Apply rendering settings
-            GradientPaint gradient = new GradientPaint(shape.getX(), shape.getY(), Color.RED, (float) shape.getX() + 50, shape.getY(), Color.WHITE);
-            g2.setPaint(gradient);
-            
-            BasicStroke wideStroke = new BasicStroke(2.0f);
-            g2.setColor(Color.black);
-            g2.setStroke(wideStroke);
-            
-            // Draw the shape
             shape.draw(g2);
         }
     }

@@ -9,8 +9,7 @@ public class Cube extends SimpleShape {
     CubePanel cube;
 
     public Cube(int x, int y) {
-        this.x = x - size/2;
-        this.y = y - size/2;
+        super(x, y);
     }
 
 
@@ -21,9 +20,8 @@ public class Cube extends SimpleShape {
 
     @Override
     public void draw(Graphics2D g2) {
-        Graphics2D g2d = (Graphics2D) g2;
         cube = new CubePanel(100, x, y);
-        cube.paintComponent(g2d);
+        cube.paintComponent(g2);
     }
 
     @Override

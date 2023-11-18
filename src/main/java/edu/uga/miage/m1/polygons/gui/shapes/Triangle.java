@@ -35,7 +35,8 @@ public class Triangle extends SimpleShape  {
     private int[] ycoords;
 
     public Triangle(int x, int y) {
-        setCoordinates(x - size / 2, y - size / 2);
+        super(x, y);
+        setCoordinates(this.x, this.y);
     }
 
     public void draw(Graphics2D g2) {

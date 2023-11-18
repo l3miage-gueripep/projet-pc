@@ -62,7 +62,7 @@ public class JDrawingFrame extends JFrame {
         initializeShapeGroups();
 
         addUndoAction();
-        drawTool = new DrawTool();
+        drawTool = new DrawTool(this);
         repaint();
     }
 
@@ -168,6 +168,12 @@ public class JDrawingFrame extends JFrame {
         this.currentlySelectedGroupButton = currentlySelectedGroupButton;
     }
 
+    public void resetGroupButtons(){
+        for(var groupButton : groupButtons){
+            groupButton.getShapes().clear();
+        }
+    }
+
 
 
     public List<SimpleShape> getDrawnShapes() {
@@ -188,8 +194,8 @@ public class JDrawingFrame extends JFrame {
     public void setShapeSelected(Shapes selected) {
         this.shapeSelected = selected;
     }
-    public Graphics2D getGraphics2d(){
-        return (Graphics2D) getGraphics();
+    public Graphics2D getPanelG2(){
+        return (Graphics2D) panel.getGraphics();
     }
 
 

@@ -88,7 +88,7 @@ public class PanelMoveMouseListener implements MouseListener {
     }
 
     private void changeShapeSize(SimpleShape shape, int newSize){
-        Graphics2D g2 = (Graphics2D) jDrawingFrame.getPanel().getGraphics();
+        Graphics2D g2 = jDrawingFrame.getPanelG2();
         shape.applySize(g2, newSize);
     }
 

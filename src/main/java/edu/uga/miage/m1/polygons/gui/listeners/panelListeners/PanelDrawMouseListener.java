@@ -31,7 +31,7 @@ public class PanelDrawMouseListener implements MouseListener {
         var panel = jDrawingFrame.getPanel();
         var selected = jDrawingFrame.getShapeSelected();
         if (panel.contains(evt.getX(), evt.getY()) && selected != null) {
-            Graphics2D g2 = (Graphics2D) panel.getGraphics();
+            Graphics2D g2 = jDrawingFrame.getPanelG2();
             SimpleShape shape = null;
             switch(selected) {
                 case CIRCLE:
@@ -49,7 +49,7 @@ public class PanelDrawMouseListener implements MouseListener {
                 default:
                     logger.log(Level.FINE, "No shape named {0}", selected);
             }
-            DrawShapeCommand drawShapeCommand = new DrawShapeCommand(shape, g2);
+            DrawShapeCommand drawShapeCommand = new DrawShapeCommand(shape);
 
             var drawTool = jDrawingFrame.getDrawTool();
             drawTool.addCommand(drawShapeCommand);

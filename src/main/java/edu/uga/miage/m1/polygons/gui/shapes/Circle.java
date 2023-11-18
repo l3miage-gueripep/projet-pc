@@ -32,8 +32,7 @@ public class Circle extends SimpleShape {
     private Ellipse2D circle;
 
     public Circle(int x, int y) {
-        this.x = x - size/2;
-        this.y = y - size/2;
+        super(x, y);
         this.circle = new Ellipse2D.Double(this.x, this.y, size, size);
     }
 

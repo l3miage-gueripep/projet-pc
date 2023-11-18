@@ -1,7 +1,6 @@
 package edu.uga.miage.m1.polygons.gui.listeners;
 
 import java.awt.Cursor;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import edu.uga.miage.m1.polygons.gui.GroupButton;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.DrawingPanel.Mode;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
-
 
 public class GroupButtonListener implements ActionListener {
     private JDrawingFrame jDrawingFrame;

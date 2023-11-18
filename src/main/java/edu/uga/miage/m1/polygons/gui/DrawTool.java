@@ -11,9 +11,11 @@ import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 public class DrawTool {
 
     protected List<ShapeCommand> commands;
+    private JDrawingFrame jDrawingFrame;
 
-    public DrawTool() {
+    public DrawTool(JDrawingFrame jDrawingFrame) {
         commands = new ArrayList<>();
+        this.jDrawingFrame = jDrawingFrame;
     }
 
     public ShapeCommand getLastCommand(){
@@ -54,7 +56,8 @@ public class DrawTool {
             if (command instanceof DrawShapeCommand) {
                 SimpleShape drawnShape = command.getShape();
                 if (movedShape.equals(drawnShape)) {
-                    ((DrawShapeCommand)command).setMoved(moved);
+                    movedShape.setIsMoved(moved);
+                    // ((DrawShapeCommand)command).setMoved(moved);
                     break;
                 }
             }
@@ -69,8 +72,16 @@ public class DrawTool {
     }
 
     public void play() {
+        jDrawingFrame.resetGroupButtons();
+        for(SimpleShape shape : jDrawingFrame.getDrawnShapes()){
+            shape.setSelected(false);
+        }
         for (ShapeCommand command : commands) {
             command.execute();
+        }
+
+        for(SimpleShape shape : jDrawingFrame.getDrawnShapes()){
+            shape.draw(jDrawingFrame.getPanelG2());
         }
     }
 
