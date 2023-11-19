@@ -1,6 +1,5 @@
 package edu.uga.miage.m1.polygons.gui.listeners.panellisteners;
 
-import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.logging.Level;

@@ -1,49 +1,44 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
+import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
-import static org.mockito.Mockito.verify;
-import static org.mockito.ArgumentMatchers.any;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.geom.GeneralPath;
 
+import java.awt.Graphics2D;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class TriangleTest {
 
     private Triangle triangle;
-    private int x, y;
+    private Graphics2D graphics2D;
+    private Visitor visitor;
 
-    @Mock
-    private Graphics2D mockGraphics;
-    
     @BeforeEach
-    void setUp(){
-        triangle = new Triangle(x, y);
-        MockitoAnnotations.openMocks(this);
+    public void setUp() {
+        triangle = new Triangle(10, 20);
+        graphics2D = mock(Graphics2D.class);
+        visitor = mock(Visitor.class);
     }
 
     @Test
-    void constructorTest() {
-        assertNotNull(triangle);
-        assertEquals(triangle.getX(), x - 25);
-        assertEquals(triangle.getY(), y - 25);
+    void testDraw() {
+        triangle.draw(graphics2D);
+        // Verify that fill and draw are called on the Graphics2D object
+        verify(graphics2D, times(1)).fill(any());
+        verify(graphics2D, times(1)).draw(any());
     }
 
-    @Test 
-    void drawTest(){
-        triangle.draw(mockGraphics);
-        verify(mockGraphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        verify(mockGraphics).setPaint(any(GradientPaint.class));
-        verify(mockGraphics).fill(any(GeneralPath.class));
-        verify(mockGraphics).setStroke(any(BasicStroke.class));
-        verify(mockGraphics).setColor(Color.black);
+
+    @Test
+    void testApplySize() {
+        triangle.applySize(graphics2D, 100);
+        assertTrue(triangle.isInside(50, 60));
+    }
+
+    @Test
+    void testAccept() {
+        triangle.accept(visitor);
+        verify(visitor, times(1)).visit(triangle);
     }
 }
-

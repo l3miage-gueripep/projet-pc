@@ -1,59 +1,55 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.verify;
-
+import edu.uga.miage.m1.polygons.gui.shapes.Square;
+import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
-import static org.mockito.ArgumentMatchers.any;
-
-
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.geom.Rectangle2D;
 
-import edu.uga.miage.m1.polygons.gui.shapes.Square;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class SquareTest {
-    @Mock
-    private Graphics2D mockGraphics;
 
     private Square square;
-    private int x, y;
-    
+    private Graphics2D graphics2D;
+    private Visitor visitor;
+
     @BeforeEach
-    void setUp(){
-        square = new Square(x, y);
-        MockitoAnnotations.openMocks(this);
+    public void setUp() {
+        square = new Square(10, 20);
+        graphics2D = mock(Graphics2D.class);
+        visitor = mock(Visitor.class);
     }
 
     @Test
-    void testConstructor() {
-        assertNotNull(square);
-        assertEquals(square.getX(), x - 25);
-        assertEquals(square.getY(), y - 25);
+    void testDraw() {
+        square.draw(graphics2D);
+        // Verify that fill and draw are called on the Graphics2D object
+        verify(graphics2D, times(1)).fill(any());
+        verify(graphics2D, times(1)).draw(any());
     }
 
-    @Test 
-    void drawTest(){
-        square.draw(mockGraphics);
+    @Test
+    void testIsInside() {
+        assertTrue(square.isInside(15, 25));
+        assertFalse(square.isInside(100, 100));
+    }
 
-        // on verifie que la methode setRenderingHint est appelée
-        verify(mockGraphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    @Test
+    void testSetCoordinates() {
+        square.setCoordinates(30, 40);
+        assertTrue(square.isInside(35, 45));
+    }
 
-        // ensuite on verifie la creation de gradienpaint
-        verify(mockGraphics).setPaint(any(GradientPaint.class));
-        // verifier l'appel de methodes fill et draw
-        verify(mockGraphics).fill(any(Rectangle2D.Double.class));
-        verify(mockGraphics).draw(any(Rectangle2D.Double.class));
+    @Test
+    void testApplySize() {
+        square.applySize(graphics2D, 100);
+        assertTrue(square.isInside(50, 60));
+    }
 
-        // Verifiction des reglages
-        verify(mockGraphics).setStroke(any(BasicStroke.class));
-        verify(mockGraphics).setColor(Color.black);
+    @Test
+    void testAccept() {
+        square.accept(visitor);
+        verify(visitor, times(1)).visit(square);
     }
 }

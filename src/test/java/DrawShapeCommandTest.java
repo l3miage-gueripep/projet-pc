@@ -18,7 +18,7 @@ class DrawShapeCommandTest {
     private Graphics2D mockGraphics;
     
     @BeforeEach
-    void setUp(){
+    public void setUp(){
         MockitoAnnotations.openMocks(this);
         SimpleShape shape = new Circle(0, 0);
         this.drawShapeCommand= new DrawShapeCommand(shape);
