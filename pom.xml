@@ -10,6 +10,9 @@
 		<maven.compiler.source>11</maven.compiler.source>
     	<maven.compiler.target>11</maven.compiler.target>
     	<sonar.host.url>http://im2ag-sonar.u-ga.fr:9000</sonar.host.url>
+		<sonar.login>mg2_7</sonar.login>
+    	<sonar.password>mg7</sonar.password>
+
 	</properties>
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.glassfish/javax.json -->

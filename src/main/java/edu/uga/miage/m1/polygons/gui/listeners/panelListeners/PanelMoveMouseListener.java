@@ -1,4 +1,4 @@
-package edu.uga.miage.m1.polygons.gui.listeners.panelListeners;
+package edu.uga.miage.m1.polygons.gui.listeners.panellisteners;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -18,7 +18,7 @@ public class PanelMoveMouseListener implements MouseListener {
     private int initialX;
     private int initialY;
 
-    private final int onDragSizeChange = 10;
+    private static final int ON_DRAG_SIZE_CHANGE = 10;
 
     public PanelMoveMouseListener(JDrawingFrame jDrawingFrame) {
         super();
@@ -54,12 +54,12 @@ public class PanelMoveMouseListener implements MouseListener {
             currentlySelectedShapes.forEach(shape -> {
                 if(shape != movingShapes.get(0))
                     movingShapes.add(shape);
-                changeShapeSize(shape, shape.getSize() + onDragSizeChange);
+                changeShapeSize(shape, shape.getSize() + ON_DRAG_SIZE_CHANGE);
             });
         }
         else{
             //moving just one shape
-            changeShapeSize(movingShapes.get(0), movingShapes.get(0).getSize() + onDragSizeChange);
+            changeShapeSize(movingShapes.get(0), movingShapes.get(0).getSize() + ON_DRAG_SIZE_CHANGE);
         }
         //we'll need this variables to move the shape on the right place
         this.initialX = movingShapes.get(0).getX();
@@ -73,7 +73,7 @@ public class PanelMoveMouseListener implements MouseListener {
         // needs to do this before actually changing the on screen shape size to move the shape on the right place
         // changing shape size before repaint = visual glitches
         for(SimpleShape shape : movingShapes){
-            shape.setSize(shape.getSize() - onDragSizeChange);
+            shape.setSize(shape.getSize() - ON_DRAG_SIZE_CHANGE);
         }
         ArrayList<SimpleShape> movingShapesCopy = new ArrayList<>(movingShapes);
         drawTool.addCommand(new MoveShapesCommand(movingShapesCopy, (x - initialX), (y - initialY)));

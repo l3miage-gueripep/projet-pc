@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.BoxLayout;
@@ -25,28 +26,27 @@ import javax.swing.SwingConstants;
 
 import edu.uga.miage.m1.polygons.gui.listeners.CursorButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.GroupButtonListener;
-import edu.uga.miage.m1.polygons.gui.listeners.panelListeners.PanelGroupMouseListener;
-import edu.uga.miage.m1.polygons.gui.listeners.panelListeners.PanelMoveMouseListener;
-import edu.uga.miage.m1.polygons.gui.listeners.panelListeners.PanelDrawMouseListener;
 import edu.uga.miage.m1.polygons.gui.listeners.ShapeButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.UndoAction;
 import edu.uga.miage.m1.polygons.gui.listeners.exports.JsonActionListener;
 import edu.uga.miage.m1.polygons.gui.listeners.exports.XMLActionListener;
+import edu.uga.miage.m1.polygons.gui.listeners.panellisteners.PanelDrawMouseListener;
+import edu.uga.miage.m1.polygons.gui.listeners.panellisteners.PanelGroupMouseListener;
+import edu.uga.miage.m1.polygons.gui.listeners.panellisteners.PanelMoveMouseListener;
 import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 
 public class JDrawingFrame extends JFrame {
     private static JDrawingFrame instance;
     private static final long serialVersionUID = 1L;
-    private final int FRAME_WIDTH = 700;
-    private final int GROUPS_AMOUNT = 5;
-    private final int BUTTONS_SIZE = 50;
+    private static final int FRAME_WIDTH = 700;
+    private static final int GROUPS_AMOUNT = 5;
+    private static final int BUTTONS_SIZE = 50;
     private JToolBar toolbar;
     private JToolBar groupsToolbar;
     private Shapes shapeSelected;
     private DrawingPanel panel;
-    private JLabel label;
-    private List<SimpleShape> drawnShapes = new ArrayList<>();
+    private transient List<SimpleShape> drawnShapes = new ArrayList<>();
     private transient DrawTool drawTool;
     private EnumMap<Shapes, JButton> shapeButtons = new EnumMap<>(Shapes.class);
     private List<GroupButton> groupButtons = new ArrayList<>();
@@ -97,7 +97,7 @@ public class JDrawingFrame extends JFrame {
         toolbar = new JToolBar("Toolbar");
         groupsToolbar = new JToolBar("Groups", SwingConstants.VERTICAL);
         panel = initializePanel();
-        label = new JLabel(" ", SwingConstants.LEFT);
+        JLabel label = new JLabel(" ", SwingConstants.LEFT);
         setLayout(new BorderLayout());
         add(groupsToolbar, BorderLayout.WEST);
         add(toolbar, BorderLayout.NORTH);
@@ -108,14 +108,14 @@ public class JDrawingFrame extends JFrame {
     }
 
     private DrawingPanel initializePanel() {
-        DrawingPanel panel = new DrawingPanel(this);
-        panel.setBackground(Color.WHITE);
-        panel.setLayout(null);
-        panel.setMinimumSize(new Dimension(FRAME_WIDTH, FRAME_WIDTH));
-        panel.addMouseListener(new PanelDrawMouseListener(this));
-        panel.addMouseListener(new PanelMoveMouseListener(this));
-        panel.addMouseListener(new PanelGroupMouseListener(this));
-        return panel;
+        DrawingPanel drawingPanel = new DrawingPanel(this);
+        drawingPanel.setBackground(Color.WHITE);
+        drawingPanel.setLayout(null);
+        drawingPanel.setMinimumSize(new Dimension(FRAME_WIDTH, FRAME_WIDTH));
+        drawingPanel.addMouseListener(new PanelDrawMouseListener(this));
+        drawingPanel.addMouseListener(new PanelMoveMouseListener(this));
+        drawingPanel.addMouseListener(new PanelGroupMouseListener(this));
+        return drawingPanel;
     }
 
     private void addTopToolbarButtons(){
@@ -214,7 +214,7 @@ public class JDrawingFrame extends JFrame {
     public List<SimpleShape> getDrawnShapes() {
         return drawnShapes;
     }
-    public EnumMap<Shapes, JButton> getShapeButtons() {
+    public Map<Shapes, JButton> getShapeButtons() {
         return shapeButtons;
     }
     public Shapes getShapeSelected() {

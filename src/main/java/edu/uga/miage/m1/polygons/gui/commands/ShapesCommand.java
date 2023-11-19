@@ -1,13 +1,13 @@
 package edu.uga.miage.m1.polygons.gui.commands;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 
 public abstract class ShapesCommand implements Command {
-    protected ArrayList<SimpleShape> shapes;
+    protected List<SimpleShape> shapes;
 
-    public ArrayList<SimpleShape> getShapes(){
+    public List<SimpleShape> getShapes(){
         return this.shapes;
     }
 }

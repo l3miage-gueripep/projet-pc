@@ -1,4 +1,4 @@
-package edu.uga.miage.m1.polygons.gui.listeners.panelListeners;
+package edu.uga.miage.m1.polygons.gui.listeners.panellisteners;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
@@ -31,7 +31,6 @@ public class PanelDrawMouseListener implements MouseListener {
         var panel = jDrawingFrame.getPanel();
         var selected = jDrawingFrame.getShapeSelected();
         if (panel.contains(evt.getX(), evt.getY()) && selected != null) {
-            Graphics2D g2 = jDrawingFrame.getPanelG2();
             SimpleShape shape = null;
             switch(selected) {
                 case CIRCLE:

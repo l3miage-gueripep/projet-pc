@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 
 import edu.uga.miage.m1.polygons.gui.GroupButton;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
@@ -58,7 +58,7 @@ public class GroupButtonListener implements ActionListener {
         toggleShapes(currentlySelectedGroupButton.getShapes());
     }
 
-    private void toggleShapes(ArrayList<SimpleShape> shapes){
+    private void toggleShapes(List<SimpleShape> shapes){
         for(SimpleShape shape : shapes){
             shape.toggleSelected();
         }

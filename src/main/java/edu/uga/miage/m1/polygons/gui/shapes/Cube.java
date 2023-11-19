@@ -6,7 +6,7 @@ import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 import edu.uga.singleshape.CubePanel;
 
 public class Cube extends SimpleShape {
-    CubePanel cube;
+    CubePanel cubeShape;
 
     public Cube(int x, int y) {
         super(x, y);
@@ -20,8 +20,8 @@ public class Cube extends SimpleShape {
 
     @Override
     public void draw(Graphics2D g2) {
-        cube = new CubePanel(100, x, y);
-        cube.paintComponent(g2);
+        cubeShape = new CubePanel(100, x, y);
+        cubeShape.paintComponent(g2);
     }
 
     @Override

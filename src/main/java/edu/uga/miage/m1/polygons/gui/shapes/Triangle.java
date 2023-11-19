@@ -30,7 +30,7 @@ import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 
 public class Triangle extends SimpleShape  {
 
-    private GeneralPath triangle;
+    private GeneralPath triangleShape;
     private int[] xcoords;
     private int[] ycoords;
 
@@ -40,20 +40,20 @@ public class Triangle extends SimpleShape  {
     }
 
     public void draw(Graphics2D g2) {
-        this.triangle = new GeneralPath(Path2D.WIND_EVEN_ODD, xcoords.length);
+        this.triangleShape = new GeneralPath(Path2D.WIND_EVEN_ODD, xcoords.length);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         GradientPaint gradient = new GradientPaint(x,  y, Color.GREEN,  (float)x + size,  y, Color.WHITE);
         g2.setPaint(gradient);
-        triangle.moveTo((float)x + size, y + size);
+        triangleShape.moveTo((float)x + size, (float) y + size);
         for (int i = 0; i < xcoords.length; i++) {
-            triangle.lineTo(xcoords[i], ycoords[i]);
+            triangleShape.lineTo(xcoords[i], ycoords[i]);
         }
-        triangle.closePath();
-        g2.fill(triangle);
+        triangleShape.closePath();
+        g2.fill(triangleShape);
         BasicStroke wideStroke = new BasicStroke(2.0f);
         g2.setColor(super.getBorderColor());
         g2.setStroke(wideStroke);
-        g2.draw(triangle);
+        g2.draw(triangleShape);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class Triangle extends SimpleShape  {
 
     @Override
     public boolean isInside(int x, int y) {
-        return triangle.contains(x, y);
+        return triangleShape.contains(x, y);
     }
 
 

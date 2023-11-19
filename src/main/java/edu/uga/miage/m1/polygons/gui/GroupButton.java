@@ -2,6 +2,7 @@ package edu.uga.miage.m1.polygons.gui;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -12,14 +13,14 @@ import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 public class GroupButton extends JButton{
     
     
-    private ArrayList<SimpleShape> shapes;
+    private transient ArrayList<SimpleShape> shapes;
     private static int numberOfGroups = 0;
     private int id;
 
     public GroupButton(String text) {
         super(text);
         this.id = numberOfGroups++;
-        shapes = new ArrayList<SimpleShape>();
+        shapes = new ArrayList<>();
         setBackground(Color.WHITE);
     }
 
@@ -31,7 +32,7 @@ public class GroupButton extends JButton{
         shapes.remove(shape);
     }
 
-    public ArrayList<SimpleShape> getShapes() {
+    public List<SimpleShape> getShapes() {
         return shapes;
     }
 

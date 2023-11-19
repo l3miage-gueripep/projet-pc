@@ -1,5 +1,5 @@
 package edu.uga.miage.m1.polygons.gui.commands;
-import java.util.ArrayList;
+import java.util.List;
 
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 
@@ -7,7 +7,7 @@ public class MoveShapesCommand extends ShapesCommand{
     private int vectorX;
     private int vectorY;
 
-    public MoveShapesCommand(ArrayList<SimpleShape> shapes, int vectorX, int vectorY){
+    public MoveShapesCommand(List<SimpleShape> shapes, int vectorX, int vectorY){
         this.shapes = shapes;
         this.vectorX = vectorX;
         this.vectorY = vectorY;

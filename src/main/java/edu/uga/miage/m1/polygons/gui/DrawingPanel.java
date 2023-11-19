@@ -1,12 +1,9 @@
 package edu.uga.miage.m1.polygons.gui;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -17,7 +14,7 @@ import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
  */
 public class DrawingPanel extends JPanel{
 
-    private ArrayList<SimpleShape> currentlySelectedShapes = new ArrayList<>();
+    private transient ArrayList<SimpleShape> currentlySelectedShapes = new ArrayList<>();
 
     public enum Mode {
         NONE,
@@ -63,7 +60,7 @@ public class DrawingPanel extends JPanel{
         currentlySelectedShapes.add(shape);
     }
 
-    public ArrayList<SimpleShape> getCurrentlySelectedShapes() {
+    public List<SimpleShape> getCurrentlySelectedShapes() {
         return currentlySelectedShapes;
     }
 }

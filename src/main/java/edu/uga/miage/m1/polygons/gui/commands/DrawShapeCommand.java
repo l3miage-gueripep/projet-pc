@@ -11,8 +11,6 @@ public class DrawShapeCommand extends ShapeCommand {
 
     @Override
     public void execute() {
-        // if(!shape.getIsMoved()){
         this.shape.setCoordinates(x, y);
-        // }
     }
 }

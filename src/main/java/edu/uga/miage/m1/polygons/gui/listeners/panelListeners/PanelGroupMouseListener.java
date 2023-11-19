@@ -1,8 +1,9 @@
-package edu.uga.miage.m1.polygons.gui.listeners.panelListeners;
+package edu.uga.miage.m1.polygons.gui.listeners.panellisteners;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.DrawingPanel.Mode;
@@ -25,10 +26,10 @@ public class PanelGroupMouseListener implements MouseListener {
 
         var drawTool = jDrawingFrame.getDrawTool();
         //create a list of the single shape clicked
-        ArrayList<SimpleShape> shapes = new ArrayList<>();
+        List<SimpleShape> shapes = new ArrayList<>();
         shapes.add(clickedShape);
 
-        ArrayList<SimpleShape> selectedShapes = jDrawingFrame.getCurrentlySelectedGroupButton().getShapes();
+        List<SimpleShape> selectedShapes = jDrawingFrame.getCurrentlySelectedGroupButton().getShapes();
         drawTool.addCommand(new SelectShapesCommand(shapes, e.getX(), e.getY(), selectedShapes, jDrawingFrame));
         jDrawingFrame.resetGroupButtons();
         drawTool.play();

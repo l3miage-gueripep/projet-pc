@@ -33,8 +33,6 @@ import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
  */
 public class Square extends SimpleShape {
-    private Color borderColor = Color.BLACK;
-
     private Rectangle2D rectangle;
 
     public Square(int x, int y) {
@@ -81,7 +79,7 @@ public class Square extends SimpleShape {
             halfDifference = (size - this.size)/2;
         }
         this.size = size;
-        this.rectangle.setRect(x - halfDifference, y - halfDifference, size, size);
+        this.rectangle.setRect((double)x - halfDifference,(double) y - halfDifference, size, size);
         draw(g2);
     }
 }
