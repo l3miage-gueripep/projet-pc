@@ -45,7 +45,7 @@ class JDrawingFrameTest {
 
     @Test
     void testGetShapeSelected() {
-        assertNull(jDrawingFrame.getShapeSelected());
+        assertNull(jDrawingFrame.getShapeForm());
     }
 
     @Test
@@ -60,8 +60,8 @@ class JDrawingFrameTest {
 
     @Test
     void testSetShapeSelected() {
-        jDrawingFrame.setShapeSelected(Shapes.CIRCLE);
-        assertEquals(Shapes.CIRCLE, jDrawingFrame.getShapeSelected());
+        jDrawingFrame.setShapeForm(Shapes.CIRCLE);
+        assertEquals(Shapes.CIRCLE, jDrawingFrame.getShapeForm());
     }
 
     @Test

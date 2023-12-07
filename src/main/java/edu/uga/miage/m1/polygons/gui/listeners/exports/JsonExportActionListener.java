@@ -16,14 +16,14 @@ import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.persistence.JSonVisitor;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitable;
 
-public class JsonActionListener implements ActionListener {
+public class JsonExportActionListener implements ActionListener {
 
-    private static final Logger logger = Logger.getLogger(JsonActionListener.class.getName());
+    private static final Logger logger = Logger.getLogger(JsonExportActionListener.class.getName());
     private static final String GENERIC_ERROR_MESSAGE = "An error occured while exporting the JSON file";
 
     JDrawingFrame jDrawingFrame;
 
-    public JsonActionListener(JDrawingFrame jDrawingFrame){
+    public JsonExportActionListener(JDrawingFrame jDrawingFrame){
         super();
         this.jDrawingFrame = jDrawingFrame;
     }

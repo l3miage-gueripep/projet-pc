@@ -30,9 +30,10 @@ public class PanelGroupMouseListener implements MouseListener {
         shapes.add(clickedShape);
 
         List<SimpleShape> selectedShapes = jDrawingFrame.getCurrentlySelectedGroupButton().getShapes();
-        drawTool.addCommand(new SelectShapesCommand(shapes, e.getX(), e.getY(), selectedShapes, jDrawingFrame));
+        drawTool.addCommand(new SelectShapesCommand(shapes, selectedShapes, jDrawingFrame));
         jDrawingFrame.resetGroupButtons();
         drawTool.play();
+        
     }
 
     @Override

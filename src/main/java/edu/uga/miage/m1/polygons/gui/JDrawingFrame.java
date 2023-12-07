@@ -28,13 +28,18 @@ import edu.uga.miage.m1.polygons.gui.listeners.CursorButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.GroupButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.ShapeButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.UndoAction;
-import edu.uga.miage.m1.polygons.gui.listeners.exports.JsonActionListener;
+import edu.uga.miage.m1.polygons.gui.listeners.exports.JsonExportActionListener;
 import edu.uga.miage.m1.polygons.gui.listeners.exports.XMLActionListener;
+import edu.uga.miage.m1.polygons.gui.listeners.imports.JsonImportActionListener;
 import edu.uga.miage.m1.polygons.gui.listeners.panellisteners.PanelDrawMouseListener;
 import edu.uga.miage.m1.polygons.gui.listeners.panellisteners.PanelGroupMouseListener;
 import edu.uga.miage.m1.polygons.gui.listeners.panellisteners.PanelMoveMouseListener;
+import edu.uga.miage.m1.polygons.gui.shapes.Circle;
+import edu.uga.miage.m1.polygons.gui.shapes.Cube;
 import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
+import edu.uga.miage.m1.polygons.gui.shapes.Square;
+import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
 
 public class JDrawingFrame extends JFrame {
     private static JDrawingFrame instance;
@@ -44,7 +49,7 @@ public class JDrawingFrame extends JFrame {
     private static final int BUTTONS_SIZE = 50;
     private JToolBar toolbar;
     private JToolBar groupsToolbar;
-    private Shapes shapeSelected;
+    private Shapes shapeForm;
     private DrawingPanel panel;
     private transient List<SimpleShape> drawnShapes = new ArrayList<>();
     private transient DrawTool drawTool;
@@ -55,7 +60,9 @@ public class JDrawingFrame extends JFrame {
 
 
     private transient GroupButtonListener groupButtonListener = new GroupButtonListener(this);
-    private transient JsonActionListener jsonActionListener = new JsonActionListener(this);
+    private transient JsonExportActionListener jsonExportActionListener = new JsonExportActionListener(this);
+    private transient JsonImportActionListener jsonImportActionListener = new JsonImportActionListener(this);
+
     private transient XMLActionListener xmlActionListener = new XMLActionListener(this);
     
     private JDrawingFrame(String frameName) {
@@ -122,6 +129,7 @@ public class JDrawingFrame extends JFrame {
         addShapesButtons();
         addCursorButton();
         addExportButtons();
+        addImportButtons();
     }
 
     private void addShapesButtons() {
@@ -163,10 +171,25 @@ public class JDrawingFrame extends JFrame {
         Dimension maxDimension = new Dimension(200, jsonButton.getPreferredSize().height);
         jsonButton.setMaximumSize(maxDimension);
         xmlButton.setMaximumSize(maxDimension);
-        jsonButton.addActionListener(jsonActionListener);
+        jsonButton.addActionListener(jsonExportActionListener);
         xmlButton.addActionListener(xmlActionListener);
         buttonPanel.add(jsonButton);
         buttonPanel.add(xmlButton);
+        toolbar.add(buttonPanel, BorderLayout.EAST);
+    }
+
+    private void addImportButtons(){
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
+        JButton jsonButton = new JButton("Importer JSON");
+        JButton xmlButton = new JButton("Importer XML");
+        Dimension maxDimension = new Dimension(200, jsonButton.getPreferredSize().height);
+        jsonButton.setMaximumSize(maxDimension);
+        xmlButton.setMaximumSize(maxDimension);
+        jsonButton.addActionListener(jsonImportActionListener);
+        xmlButton.addActionListener(xmlActionListener);
+        buttonPanel.add(jsonButton);
+        // buttonPanel.add(xmlButton);
         toolbar.add(buttonPanel, BorderLayout.EAST);
     }
 
@@ -217,8 +240,8 @@ public class JDrawingFrame extends JFrame {
     public Map<Shapes, JButton> getShapeButtons() {
         return shapeButtons;
     }
-    public Shapes getShapeSelected() {
-        return shapeSelected;
+    public Shapes getShapeForm() {
+        return shapeForm;
     }
     public DrawingPanel getPanel() {
         return panel;
@@ -226,8 +249,11 @@ public class JDrawingFrame extends JFrame {
     public List<GroupButton> getGroupButtons() {
         return groupButtons;
     }
-    public void setShapeSelected(Shapes selected) {
-        this.shapeSelected = selected;
+    public GroupButton getGroupButton(int id) {
+        return groupButtons.get(id);
+    }
+    public void setShapeForm(Shapes selected) {
+        this.shapeForm = selected;
     }
     public JButton getCursorButton() {
         return cursorButton;
@@ -235,8 +261,27 @@ public class JDrawingFrame extends JFrame {
     public Graphics2D getPanelG2(){
         return (Graphics2D) panel.getGraphics();
     }
+    public SimpleShape createShape(Shapes form, int x, int y){
+        SimpleShape shape = null;
+        switch(form){
+            case CIRCLE:
+                shape = new Circle(x, y);
+                break;
+            case TRIANGLE:
+                shape = new Triangle(x, y);
+                break;
+            case SQUARE:
+                shape = new Square(x, y);
+                break;
+            case CUBE:
+                shape = new Cube(x, y);
+                break;
+            default:
+                System.out.println("No shape named " + form);
 
-
+        }
+        return shape;
+    }
 }
 
 

@@ -4,7 +4,7 @@ import java.util.List;
 
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 
-public abstract class ShapesCommand implements Command {
+public abstract class ShapesCommand extends Command {
     protected List<SimpleShape> shapes;
 
     public List<SimpleShape> getShapes(){

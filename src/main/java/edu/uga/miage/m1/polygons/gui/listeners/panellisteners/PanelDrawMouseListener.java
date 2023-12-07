@@ -28,7 +28,7 @@ public class PanelDrawMouseListener implements MouseListener {
     public void mouseClicked(MouseEvent evt) {
         if(jDrawingFrame.getPanel().getMode() != Mode.DRAW) return;
         var panel = jDrawingFrame.getPanel();
-        var selected = jDrawingFrame.getShapeSelected();
+        var selected = jDrawingFrame.getShapeForm();
         if (panel.contains(evt.getX(), evt.getY()) && selected != null) {
             SimpleShape shape = null;
             switch(selected) {
