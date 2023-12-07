@@ -51,7 +51,7 @@ public class PanelDrawMouseListener implements MouseListener {
 
             var drawTool = jDrawingFrame.getDrawTool();
             drawTool.addCommand(drawShapeCommand);
-            jDrawingFrame.getDrawnShapes().add(shape);
+            jDrawingFrame.addDrawnShape(shape);
             drawTool.play();
         }
     }

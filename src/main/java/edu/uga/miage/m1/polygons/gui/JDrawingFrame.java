@@ -62,7 +62,7 @@ public class JDrawingFrame extends JFrame {
     private transient GroupButtonListener groupButtonListener = new GroupButtonListener(this);
     private transient JsonExportActionListener jsonExportActionListener = new JsonExportActionListener(this);
     private transient JsonImportActionListener jsonImportActionListener = new JsonImportActionListener(this);
-
+    private JButton jsonImportButton;
     private transient XMLActionListener xmlActionListener = new XMLActionListener(this);
     
     private JDrawingFrame(String frameName) {
@@ -181,14 +181,14 @@ public class JDrawingFrame extends JFrame {
     private void addImportButtons(){
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
-        JButton jsonButton = new JButton("Importer JSON");
+        jsonImportButton = new JButton("Importer JSON");
         JButton xmlButton = new JButton("Importer XML");
-        Dimension maxDimension = new Dimension(200, jsonButton.getPreferredSize().height);
-        jsonButton.setMaximumSize(maxDimension);
+        Dimension maxDimension = new Dimension(200, jsonImportButton.getPreferredSize().height);
+        jsonImportButton.setMaximumSize(maxDimension);
         xmlButton.setMaximumSize(maxDimension);
-        jsonButton.addActionListener(jsonImportActionListener);
+        jsonImportButton.addActionListener(jsonImportActionListener);
         xmlButton.addActionListener(xmlActionListener);
-        buttonPanel.add(jsonButton);
+        buttonPanel.add(jsonImportButton);
         // buttonPanel.add(xmlButton);
         toolbar.add(buttonPanel, BorderLayout.EAST);
     }
@@ -237,6 +237,15 @@ public class JDrawingFrame extends JFrame {
     public List<SimpleShape> getDrawnShapes() {
         return drawnShapes;
     }
+    public void addDrawnShape(SimpleShape shape) {
+        drawnShapes.add(shape);
+        jsonImportButton.setEnabled(false);
+    }
+    public void removeDrawnShape(int index) {
+        drawnShapes.remove(index);
+        jsonImportButton.setEnabled(drawnShapes.isEmpty());
+    }
+
     public Map<Shapes, JButton> getShapeButtons() {
         return shapeButtons;
     }

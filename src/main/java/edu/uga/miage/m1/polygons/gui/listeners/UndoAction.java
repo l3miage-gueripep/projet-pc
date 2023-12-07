@@ -23,7 +23,7 @@ public class UndoAction extends AbstractAction {
 
         boolean isLastCommandDrawShapeCommand = !drawnShapes.isEmpty() && lastCommand instanceof DrawShapeCommand;
         if(isLastCommandDrawShapeCommand){
-            drawnShapes.remove(drawnShapes.size()-1);
+            jDrawingFrame.removeDrawnShape(drawnShapes.size()-1);
         }
         drawTool.play();
         jDrawingFrame.repaint();

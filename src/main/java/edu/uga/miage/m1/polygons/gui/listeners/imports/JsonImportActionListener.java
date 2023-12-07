@@ -50,10 +50,10 @@ public class JsonImportActionListener implements ActionListener {
     private void drawShapes(List<ShapeData> shapes){
         for(ShapeData shape : shapes){
             Shapes shapeForm = Shapes.fromString(shape.getType());
-            SimpleShape simpleShape = jDrawingFrame.createShape(shapeForm, shape.getX(), shape.getY());
+            SimpleShape simpleShape = jDrawingFrame.createShape(shapeForm, shape.getX() + 25, shape.getY() + 25);
             DrawShapeCommand drawShapeCommand = new DrawShapeCommand(simpleShape, false);
             jDrawingFrame.getDrawTool().addCommand(drawShapeCommand);
-            jDrawingFrame.getDrawnShapes().add(simpleShape);
+            jDrawingFrame.addDrawnShape(simpleShape);
 
         }
     }
