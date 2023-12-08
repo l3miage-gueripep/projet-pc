@@ -36,15 +36,10 @@ public class GroupButton extends JButton{
         return shapes;
     }
 
-    public JsonObject getJsonObject(){
-        var jsonObjectBuilder = Json.createObjectBuilder();
-        jsonObjectBuilder.add("id", id);
-        var jsonArrayBuilder = Json.createArrayBuilder();
-        for(SimpleShape shape : shapes){
-            jsonArrayBuilder.add(shape.getId());
-        }
-        jsonObjectBuilder.add("shapes", jsonArrayBuilder);
-        return jsonObjectBuilder.build();
+    public int getId() {
+        return id;
     }
+
+
 
 }

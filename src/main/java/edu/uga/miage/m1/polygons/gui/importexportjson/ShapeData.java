@@ -1,7 +1,4 @@
-package edu.uga.miage.m1.polygons.gui.json;
-
-import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
-import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
+package edu.uga.miage.m1.polygons.gui.importexportjson;
 
 public class ShapeData {
     private int id;

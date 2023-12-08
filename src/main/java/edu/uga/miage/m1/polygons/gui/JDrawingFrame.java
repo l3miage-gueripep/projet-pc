@@ -24,6 +24,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
+import edu.uga.miage.m1.polygons.gui.importexportjson.GroupData;
 import edu.uga.miage.m1.polygons.gui.listeners.CursorButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.GroupButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.ShapeButtonListener;
@@ -257,6 +258,20 @@ public class JDrawingFrame extends JFrame {
     }
     public List<GroupButton> getGroupButtons() {
         return groupButtons;
+    }
+    public List<GroupData> getGroupsDatas(){
+        List<GroupData> groupsDatas = new ArrayList<>();
+        for(GroupButton groupButton : groupButtons){
+            GroupData groupData = new GroupData();
+            groupData.setId(groupButton.getId());
+            List<Integer> shapesIds = new ArrayList<>();
+            for(SimpleShape shape : groupButton.getShapes()){
+                shapesIds.add(shape.getId());
+            }
+            groupData.setShapes(shapesIds);
+            groupsDatas.add(groupData);
+        }
+        return groupsDatas;
     }
     public GroupButton getGroupButton(int id) {
         return groupButtons.get(id);

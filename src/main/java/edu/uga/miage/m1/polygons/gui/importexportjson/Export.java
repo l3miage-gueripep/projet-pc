@@ -1,4 +1,4 @@
-package edu.uga.miage.m1.polygons.gui.json;
+package edu.uga.miage.m1.polygons.gui.importexportjson;
 
 import java.util.List;
 
