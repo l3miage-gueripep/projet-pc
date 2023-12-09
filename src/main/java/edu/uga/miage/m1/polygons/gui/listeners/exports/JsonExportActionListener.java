@@ -9,11 +9,12 @@ import javax.json.JsonObjectBuilder;
 
 
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
-import edu.uga.miage.m1.polygons.gui.importexportjson.ExportTool;
+import fr.uga.miage.m1.ExportTool;
 
 public class JsonExportActionListener implements ActionListener {
     JDrawingFrame jDrawingFrame;
     ExportTool exportTool = new ExportTool();
+
 
     public JsonExportActionListener(JDrawingFrame jDrawingFrame){
         super();
@@ -22,7 +23,7 @@ public class JsonExportActionListener implements ActionListener {
 
     
     public void actionPerformed(ActionEvent evt) {
-        JsonArrayBuilder jsonShapesArray = exportTool.createJsonShapesArray(jDrawingFrame.getDrawnShapes());
+        JsonArrayBuilder jsonShapesArray = exportTool.createJsonShapesArray(jDrawingFrame.getDrawnShapesData());
         JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder().add("shapes", jsonShapesArray);
         JsonArrayBuilder jsonGroupsArray = exportTool.createJsonGroupsArray(jDrawingFrame.getGroupsDatas());
         jsonObjectBuilder.add("groups", jsonGroupsArray);

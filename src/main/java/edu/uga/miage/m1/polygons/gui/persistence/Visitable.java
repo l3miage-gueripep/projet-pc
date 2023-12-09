@@ -5,10 +5,8 @@ package edu.uga.miage.m1.polygons.gui.persistence;
  * @author <a href="mailto:christophe.saint-marcel@univ-grenoble-alpes.fr">Christophe</a>
  */
 public interface Visitable {
-
-    /**
-     * Accept a visitor.
-     * @param visitor
-     */
     void accept(Visitor visitor);
+
+    String acceptString(StringVisitor visitor);
+
 }

@@ -40,10 +40,8 @@
 		</dependency>
 		<dependency>
 			<groupId>fr.uga.miage.m1</groupId>
-			<artifactId>edu.uga.json</artifactId>
+			<artifactId>json-file-manager</artifactId>
 			<version>1.0.0</version>
-			<systemPath>${basedir}/lib/edu.uga.json-1.0.0.jar</systemPath>
-			<scope>system</scope>
 		</dependency>
 
 		<dependency>

@@ -24,7 +24,7 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
-import edu.uga.miage.m1.polygons.gui.importexportjson.GroupData;
+import fr.uga.miage.m1.GroupData;
 import edu.uga.miage.m1.polygons.gui.listeners.CursorButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.GroupButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.ShapeButtonListener;
@@ -35,12 +35,14 @@ import edu.uga.miage.m1.polygons.gui.listeners.imports.JsonImportActionListener;
 import edu.uga.miage.m1.polygons.gui.listeners.panellisteners.PanelDrawMouseListener;
 import edu.uga.miage.m1.polygons.gui.listeners.panellisteners.PanelGroupMouseListener;
 import edu.uga.miage.m1.polygons.gui.listeners.panellisteners.PanelMoveMouseListener;
+import edu.uga.miage.m1.polygons.gui.persistence.JSonVisitor;
 import edu.uga.miage.m1.polygons.gui.shapes.Circle;
 import edu.uga.miage.m1.polygons.gui.shapes.Cube;
 import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 import edu.uga.miage.m1.polygons.gui.shapes.Square;
 import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
+import fr.uga.miage.m1.ShapeData;
 
 public class JDrawingFrame extends JFrame {
     private static JDrawingFrame instance;
@@ -238,6 +240,21 @@ public class JDrawingFrame extends JFrame {
     public List<SimpleShape> getDrawnShapes() {
         return drawnShapes;
     }
+    public List<ShapeData> getDrawnShapesData() {
+        List<ShapeData> shapesData = new ArrayList<>();
+        JSonVisitor jSonVisitor = new JSonVisitor();
+
+        for(SimpleShape shape : drawnShapes){
+            ShapeData shapeData = new ShapeData();
+            shapeData.setId(shape.getId());
+            shapeData.setType(shape.acceptString(jSonVisitor));
+            shapeData.setX(shape.getX());
+            shapeData.setY(shape.getY());
+            shapesData.add(shapeData);
+        }
+        return shapesData;
+    }
+
     public void addDrawnShape(SimpleShape shape) {
         drawnShapes.add(shape);
         jsonImportButton.setEnabled(false);
@@ -259,7 +276,7 @@ public class JDrawingFrame extends JFrame {
     public List<GroupButton> getGroupButtons() {
         return groupButtons;
     }
-    public List<GroupData> getGroupsDatas(){
+    public List<fr.uga.miage.m1.GroupData> getGroupsDatas(){
         List<GroupData> groupsDatas = new ArrayList<>();
         for(GroupButton groupButton : groupButtons){
             GroupData groupData = new GroupData();

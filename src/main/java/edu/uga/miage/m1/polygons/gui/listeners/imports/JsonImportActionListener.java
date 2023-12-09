@@ -11,12 +11,12 @@ import edu.uga.miage.m1.polygons.gui.GroupButton;
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.commands.DrawShapeCommand;
 import edu.uga.miage.m1.polygons.gui.commands.SelectShapesCommand;
-import edu.uga.miage.m1.polygons.gui.importexportjson.Export;
-import edu.uga.miage.m1.polygons.gui.importexportjson.GroupData;
-import edu.uga.miage.m1.polygons.gui.importexportjson.ImportTool;
-import edu.uga.miage.m1.polygons.gui.importexportjson.ShapeData;
 import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
+import fr.uga.miage.m1.Export;
+import fr.uga.miage.m1.GroupData;
+import fr.uga.miage.m1.ImportTool;
+import fr.uga.miage.m1.ShapeData;
 
 public class JsonImportActionListener implements ActionListener {
     JDrawingFrame jDrawingFrame;
