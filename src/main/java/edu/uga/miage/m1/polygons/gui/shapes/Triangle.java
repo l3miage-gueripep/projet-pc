@@ -25,6 +25,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Path2D;
+
+import edu.uga.miage.m1.polygons.gui.persistence.StringVisitor;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 
 
@@ -59,6 +61,11 @@ public class Triangle extends SimpleShape  {
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
+    }
+
+    @Override
+    public String acceptString(StringVisitor visitor) {
+        return visitor.visit(this);
     }
 
     @Override

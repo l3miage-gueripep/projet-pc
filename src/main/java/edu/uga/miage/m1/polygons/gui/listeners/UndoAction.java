@@ -16,12 +16,14 @@ public class UndoAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         var drawTool = jDrawingFrame.getDrawTool();
         var lastCommand = drawTool.getLastCommand();
+        if(!lastCommand.getCanCancel()) return;
+        
         drawTool.removeLastCommand();
         var drawnShapes = jDrawingFrame.getDrawnShapes();
 
         boolean isLastCommandDrawShapeCommand = !drawnShapes.isEmpty() && lastCommand instanceof DrawShapeCommand;
         if(isLastCommandDrawShapeCommand){
-            drawnShapes.remove(drawnShapes.size()-1);
+            jDrawingFrame.removeDrawnShape(drawnShapes.size()-1);
         }
         drawTool.play();
         jDrawingFrame.repaint();

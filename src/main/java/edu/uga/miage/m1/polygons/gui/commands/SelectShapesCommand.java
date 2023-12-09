@@ -13,12 +13,15 @@ public class SelectShapesCommand extends ShapeCommand{
     private List<SimpleShape> shapesGroup;
     private JDrawingFrame jDrawingFrame;
 
-    public SelectShapesCommand(List<SimpleShape> shapes, int x, int y, List<SimpleShape> shapesGroup, JDrawingFrame jDrawingFrame){
+    public SelectShapesCommand(List<SimpleShape> shapes, List<SimpleShape> shapesGroup, JDrawingFrame jDrawingFrame){
+        this(shapes, shapesGroup, jDrawingFrame, true);
+    }
+
+    public SelectShapesCommand(List<SimpleShape> shapes, List<SimpleShape> shapesGroup, JDrawingFrame jDrawingFrame, boolean canCancel){
         this.shapes = shapes;
-        this.x = x;
-        this.y = y;
         this.jDrawingFrame = jDrawingFrame;
         this.shapesGroup = shapesGroup;
+        this.canCancel = canCancel;
     }
 
     @Override

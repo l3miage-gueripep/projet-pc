@@ -30,7 +30,7 @@ public class ShapeButtonListener implements ActionListener {
             JButton btn = jDrawingFrame.getShapeButtons().get(shape);
             if (evt.getActionCommand().equals(shape.toString())) {
                 btn.setBorderPainted(true);
-                jDrawingFrame.setShapeSelected(shape);
+                jDrawingFrame.setShapeForm(shape);
             } else {
                 btn.setBorderPainted(false);
             }

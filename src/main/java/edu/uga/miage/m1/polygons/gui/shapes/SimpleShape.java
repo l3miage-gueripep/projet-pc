@@ -23,6 +23,7 @@ public abstract class SimpleShape implements Visitable {
         this.y = y - size/2;
     }
 
+
     public abstract void draw(Graphics2D g2);
     public abstract void setCoordinates(int x, int y);
     

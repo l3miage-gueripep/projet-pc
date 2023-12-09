@@ -2,23 +2,14 @@ package edu.uga.miage.m1.polygons.gui.listeners.panellisteners;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import edu.uga.miage.m1.polygons.gui.JDrawingFrame;
 import edu.uga.miage.m1.polygons.gui.DrawingPanel.Mode;
 import edu.uga.miage.m1.polygons.gui.commands.DrawShapeCommand;
-import edu.uga.miage.m1.polygons.gui.shapes.Circle;
-import edu.uga.miage.m1.polygons.gui.shapes.Cube;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
-import edu.uga.miage.m1.polygons.gui.shapes.Square;
-import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
 
 public class PanelDrawMouseListener implements MouseListener {
-
     private JDrawingFrame jDrawingFrame;
-    private static final Logger logger = Logger.getLogger(PanelDrawMouseListener.class.getName());
-
     public PanelDrawMouseListener(JDrawingFrame jDrawingFrame) {
         super();
         this.jDrawingFrame = jDrawingFrame;
@@ -28,30 +19,13 @@ public class PanelDrawMouseListener implements MouseListener {
     public void mouseClicked(MouseEvent evt) {
         if(jDrawingFrame.getPanel().getMode() != Mode.DRAW) return;
         var panel = jDrawingFrame.getPanel();
-        var selected = jDrawingFrame.getShapeSelected();
+        var selected = jDrawingFrame.getShapeForm();
         if (panel.contains(evt.getX(), evt.getY()) && selected != null) {
-            SimpleShape shape = null;
-            switch(selected) {
-                case CIRCLE:
-                    shape = new Circle(evt.getX(), evt.getY());
-                    break;
-                case TRIANGLE:
-                    shape = new Triangle(evt.getX(), evt.getY());
-                    break;
-                case SQUARE:
-                    shape = new Square(evt.getX(), evt.getY());
-                    break;
-                case CUBE:
-                    shape = new Cube(evt.getX(), evt.getY());
-                    break;
-                default:
-                    logger.log(Level.FINE, "No shape named {0}", selected);
-            }
+            SimpleShape shape = jDrawingFrame.createShape(selected, evt.getX(), evt.getY());
             DrawShapeCommand drawShapeCommand = new DrawShapeCommand(shape);
-
             var drawTool = jDrawingFrame.getDrawTool();
             drawTool.addCommand(drawShapeCommand);
-            jDrawingFrame.getDrawnShapes().add(shape);
+            jDrawingFrame.addDrawnShape(shape);
             drawTool.play();
         }
     }

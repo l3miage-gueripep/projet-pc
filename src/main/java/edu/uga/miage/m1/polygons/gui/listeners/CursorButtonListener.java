@@ -22,7 +22,7 @@ public class CursorButtonListener implements ActionListener {
         setPanelGroupButtonBackground();
         jDrawingFrame.deselectAllButtons();
         jDrawingFrame.getCursorButton().setBorderPainted(true);
-        jDrawingFrame.setShapeSelected(null);
+        jDrawingFrame.setShapeForm(null);
     }
 
     private void setPanelGroupButtonBackground(){

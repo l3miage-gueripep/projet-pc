@@ -2,6 +2,7 @@ package edu.uga.miage.m1.polygons.gui.shapes;
 
 import java.awt.Graphics2D;
 
+import edu.uga.miage.m1.polygons.gui.persistence.StringVisitor;
 import edu.uga.miage.m1.polygons.gui.persistence.Visitor;
 import edu.uga.singleshape.CubePanel;
 
@@ -17,6 +18,10 @@ public class Cube extends SimpleShape {
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
+
+    
+
+
 
     @Override
     public void draw(Graphics2D g2) {
@@ -38,6 +43,12 @@ public class Cube extends SimpleShape {
     @Override
     public void applySize(Graphics2D g2, int newSize) {
         //not implemented
+    }
+
+
+    @Override
+    public String acceptString(StringVisitor visitor) {
+        return visitor.visit(this);
     }
     
 }
