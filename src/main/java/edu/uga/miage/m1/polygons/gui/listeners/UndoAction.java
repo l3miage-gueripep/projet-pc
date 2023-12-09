@@ -16,7 +16,7 @@ public class UndoAction extends AbstractAction {
     public void actionPerformed(ActionEvent e) {
         var drawTool = jDrawingFrame.getDrawTool();
         var lastCommand = drawTool.getLastCommand();
-        if(lastCommand.getCanCancel() == false) return;
+        if(!lastCommand.getCanCancel()) return;
         
         drawTool.removeLastCommand();
         var drawnShapes = jDrawingFrame.getDrawnShapes();

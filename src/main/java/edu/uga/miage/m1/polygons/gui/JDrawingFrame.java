@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Action;
 import javax.swing.BoxLayout;
@@ -60,6 +62,10 @@ public class JDrawingFrame extends JFrame {
     private List<GroupButton> groupButtons = new ArrayList<>();
     private GroupButton currentlySelectedGroupButton;
     private JButton cursorButton;
+    private static final Logger logger = Logger.getLogger(JDrawingFrame.class.getName());
+
+
+    
 
 
     private transient GroupButtonListener groupButtonListener = new GroupButtonListener(this);
@@ -192,7 +198,6 @@ public class JDrawingFrame extends JFrame {
         jsonImportButton.addActionListener(jsonImportActionListener);
         xmlButton.addActionListener(xmlActionListener);
         buttonPanel.add(jsonImportButton);
-        // buttonPanel.add(xmlButton);
         toolbar.add(buttonPanel, BorderLayout.EAST);
     }
 
@@ -302,6 +307,7 @@ public class JDrawingFrame extends JFrame {
     public Graphics2D getPanelG2(){
         return (Graphics2D) panel.getGraphics();
     }
+
     public SimpleShape createShape(Shapes form, int x, int y){
         SimpleShape shape = null;
         switch(form){
@@ -318,9 +324,7 @@ public class JDrawingFrame extends JFrame {
                 shape = new Cube(x, y);
                 break;
             default:
-                System.out.println("No shape named " + form);
-
-        }
+                logger.log(Level.FINE, "No shape named {0}", form);        }
         return shape;
     }
 }

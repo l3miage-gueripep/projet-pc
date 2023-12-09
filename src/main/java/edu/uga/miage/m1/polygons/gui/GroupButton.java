@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.json.Json;
-import javax.json.JsonObject;
 import javax.swing.JButton;
 
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
@@ -39,7 +37,4 @@ public class GroupButton extends JButton{
     public int getId() {
         return id;
     }
-
-
-
 }
