@@ -21,12 +21,12 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 
-import fr.uga.miage.m1.GroupData;
 import edu.uga.miage.m1.polygons.gui.listeners.CursorButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.GroupButtonListener;
 import edu.uga.miage.m1.polygons.gui.listeners.ShapeButtonListener;
@@ -44,7 +44,8 @@ import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
 import edu.uga.miage.m1.polygons.gui.shapes.Square;
 import edu.uga.miage.m1.polygons.gui.shapes.Triangle;
-import fr.uga.miage.m1.ShapeData;
+import fr.uga.miage.m1.model.GroupData;
+import fr.uga.miage.m1.model.ShapeData;
 
 public class JDrawingFrame extends JFrame {
     private static JDrawingFrame instance;
@@ -71,7 +72,9 @@ public class JDrawingFrame extends JFrame {
     private transient GroupButtonListener groupButtonListener = new GroupButtonListener(this);
     private transient JsonExportActionListener jsonExportActionListener = new JsonExportActionListener(this);
     private transient JsonImportActionListener jsonImportActionListener = new JsonImportActionListener(this);
+    private JButton jsonExportButton;
     private JButton jsonImportButton;
+    private JButton xmlExportButton;
     private transient XMLActionListener xmlActionListener = new XMLActionListener(this);
     
     private JDrawingFrame(String frameName) {
@@ -175,15 +178,17 @@ public class JDrawingFrame extends JFrame {
     private void addExportButtons() {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.PAGE_AXIS));
-        JButton jsonButton = new JButton("Convertir en JSON");
-        JButton xmlButton = new JButton("Convertir en XML  ");
-        Dimension maxDimension = new Dimension(200, jsonButton.getPreferredSize().height);
-        jsonButton.setMaximumSize(maxDimension);
-        xmlButton.setMaximumSize(maxDimension);
-        jsonButton.addActionListener(jsonExportActionListener);
-        xmlButton.addActionListener(xmlActionListener);
-        buttonPanel.add(jsonButton);
-        buttonPanel.add(xmlButton);
+        jsonExportButton = new JButton("Convertir en JSON");
+        xmlExportButton = new JButton("Convertir en XML  ");
+        Dimension maxDimension = new Dimension(200, jsonExportButton.getPreferredSize().height);
+        jsonExportButton.setMaximumSize(maxDimension);
+        xmlExportButton.setMaximumSize(maxDimension);
+        jsonExportButton.addActionListener(jsonExportActionListener);
+        xmlExportButton.addActionListener(xmlActionListener);
+        buttonPanel.add(jsonExportButton);
+        jsonExportButton.setEnabled(false);
+        xmlExportButton.setEnabled(false);
+        buttonPanel.add(xmlExportButton);
         toolbar.add(buttonPanel, BorderLayout.EAST);
     }
 
@@ -263,10 +268,16 @@ public class JDrawingFrame extends JFrame {
     public void addDrawnShape(SimpleShape shape) {
         drawnShapes.add(shape);
         jsonImportButton.setEnabled(false);
+        jsonExportButton.setEnabled(true);
+        xmlExportButton.setEnabled(true);
+        
     }
     public void removeDrawnShape(int index) {
         drawnShapes.remove(index);
-        jsonImportButton.setEnabled(drawnShapes.isEmpty());
+        boolean hasShapes = !drawnShapes.isEmpty();
+        jsonImportButton.setEnabled(!hasShapes);
+        jsonExportButton.setEnabled(hasShapes);
+        xmlExportButton.setEnabled(hasShapes);
     }
 
     public Map<Shapes, JButton> getShapeButtons() {
@@ -281,7 +292,7 @@ public class JDrawingFrame extends JFrame {
     public List<GroupButton> getGroupButtons() {
         return groupButtons;
     }
-    public List<fr.uga.miage.m1.GroupData> getGroupsDatas(){
+    public List<GroupData> getGroupsDatas(){
         List<GroupData> groupsDatas = new ArrayList<>();
         for(GroupButton groupButton : groupButtons){
             GroupData groupData = new GroupData();
@@ -306,6 +317,10 @@ public class JDrawingFrame extends JFrame {
     }
     public Graphics2D getPanelG2(){
         return (Graphics2D) panel.getGraphics();
+    }
+
+    public void showError(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     public SimpleShape createShape(Shapes form, int x, int y){

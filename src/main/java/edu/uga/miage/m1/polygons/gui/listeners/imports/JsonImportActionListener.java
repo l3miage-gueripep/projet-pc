@@ -3,6 +3,7 @@ package edu.uga.miage.m1.polygons.gui.listeners.imports;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -13,10 +14,11 @@ import edu.uga.miage.m1.polygons.gui.commands.DrawShapeCommand;
 import edu.uga.miage.m1.polygons.gui.commands.SelectShapesCommand;
 import edu.uga.miage.m1.polygons.gui.shapes.Shapes;
 import edu.uga.miage.m1.polygons.gui.shapes.SimpleShape;
-import fr.uga.miage.m1.Export;
-import fr.uga.miage.m1.GroupData;
 import fr.uga.miage.m1.ImportTool;
-import fr.uga.miage.m1.ShapeData;
+import fr.uga.miage.m1.model.Export;
+import fr.uga.miage.m1.model.GroupData;
+import fr.uga.miage.m1.model.ShapeData;
+
 
 public class JsonImportActionListener implements ActionListener {
     JDrawingFrame jDrawingFrame;
@@ -27,10 +29,19 @@ public class JsonImportActionListener implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent evt) {
-        Export export = ImportTool.getExport("exports/export.json");
-        drawShapes(export.getShapes());
-        setGroups(export.getGroups());
-        jDrawingFrame.getDrawTool().play();
+        Export export = null;
+        try{
+            export = ImportTool.getExport("exports/export.json");
+        }
+        catch(FileNotFoundException e){
+            jDrawingFrame.showError("Erreur lors de l'importation du fichier, veuillez d'abord faire un export");
+        }
+
+        if(export != null){
+            drawShapes(export.getShapes());
+            setGroups(export.getGroups());
+            jDrawingFrame.getDrawTool().play();
+        }
     }
 
     private void drawShapes(List<ShapeData> shapes){
